@@ -44,5 +44,4 @@ export const findTopThreeElvesWithHighestLoad = (allLoads:number[][]):number=>{
 }
 
 findElfWithHighestLoad(getIndividualElveLoads(load));
-
 findTopThreeElvesWithHighestLoad(getIndividualElveLoads(load))
