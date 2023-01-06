@@ -1,6 +1,4 @@
 import {load} from './load'
-type elfLoad = number[];
-
 
 export const getIndividualElveLoads = (allLoadsCrude:string): number[][] => {
     const result: number[][] = [];
@@ -27,7 +25,24 @@ export const findElfWithHighestLoad = (allLoads:number[][]):number=>{
             highestLoadSum = sum;
         }
     }
+    console.log(highestLoadSum)
     return highestLoadSum;
 }
 
-console.log(findElfWithHighestLoad(getIndividualElveLoads(load)));
+export const findTopThreeElvesWithHighestLoad = (allLoads:number[][]):number=>{
+    const allLoadsTotals:number[] = [];
+
+    for(const array of allLoads){
+        const sum = array.reduce((a,b)=>a+b,0)
+        allLoadsTotals.push(sum);
+    }
+    allLoadsTotals.sort((a:number, b:number)=>b-a);
+    const topThreeLoadsSum = allLoadsTotals.splice(0,3).reduce((a,b)=>a+b)
+
+    console.log(topThreeLoadsSum);
+    return topThreeLoadsSum;
+}
+
+findElfWithHighestLoad(getIndividualElveLoads(load));
+
+findTopThreeElvesWithHighestLoad(getIndividualElveLoads(load))
