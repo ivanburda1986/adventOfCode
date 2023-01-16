@@ -14,4 +14,4 @@ export const isRequiredCapitalizationReached = (
   issuedPerpetualBondCount: number,
   issuedPerpetualBondTotalCapTarget: number
 ) =>
-  issuedPerpetualBondCount * BOND_VALUE_EUR < issuedPerpetualBondTotalCapTarget;
+  issuedPerpetualBondCount * BOND_VALUE_EUR > issuedPerpetualBondTotalCapTarget;
