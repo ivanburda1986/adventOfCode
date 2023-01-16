@@ -26,7 +26,7 @@ export const calculateDaysPerpetualBondsNeedToReachCap = (
     { maturity: 2, bonds: 1 },
   ];
 
-  function executeNewDayBondJob(): void {
+  function executeNewDayPerpetualBondJob(): void {
     perpetualBondProgramDayCount++;
     let newlyIssuedPerpetualBondCount = 0;
 
@@ -52,7 +52,7 @@ export const calculateDaysPerpetualBondsNeedToReachCap = (
       issuedPerpetualBondTotalCapTarget
     )
   ) {
-    executeNewDayBondJob();
+    executeNewDayPerpetualBondJob();
   }
 
   console.log(perpetualBondProgramDayCount);
