@@ -3,9 +3,9 @@ import {
   isRequiredCapitalizationReached,
 } from "./perpetualSavingBondService";
 
-export const BOND_VALUE_EUR = 10;
+export const PERPETUAL_BOND_VALUE_EUR = 10;
 export const TRANSACTION_PROCESSING_TIME_DAYS = 3;
-export const DAYS_TO_YIELD_NEW_BOND = 7;
+export const DAYS_TO_YIELD_NEW_PERPETUAL_BOND = 7;
 export const ERSTE_TOTAL_ASSETS_EUR = 272000000000;
 
 export interface MaturityEntry {
