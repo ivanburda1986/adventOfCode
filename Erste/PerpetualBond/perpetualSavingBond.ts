@@ -1,4 +1,7 @@
-import { areBondsMatureToYieldNewBond } from "./perpetualSavingBondService";
+import {
+  areBondsMatureToYieldNewBond,
+  isRequiredCapitalizationReached,
+} from "./perpetualSavingBondService";
 
 export const BOND_VALUE_EUR = 10;
 export const TRANSACTION_PROCESSING_TIME_DAYS = 3;
@@ -43,13 +46,15 @@ export const calculateDaysPerpetualBondsNeedToReachCap = (
     }
   }
 
-  function endDayIssuedBondTotalCap(): number {
-    return issuedPerpetualBondCount * BOND_VALUE_EUR;
-  }
-
-  while (endDayIssuedBondTotalCap() < issuedPerpetualBondTotalCapTarget) {
+  while (
+    !isRequiredCapitalizationReached(
+      issuedPerpetualBondCount,
+      issuedPerpetualBondTotalCapTarget
+    )
+  ) {
     executeNewDayBondJob();
   }
+
   console.log(perpetualBondProgramDayCount);
   return perpetualBondProgramDayCount;
 };
