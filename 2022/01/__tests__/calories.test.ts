@@ -1,33 +1,60 @@
-import {getIndividualElveLoads} from "../calories";
+import {findElfWithHighestLoad, findTopThreeElvesWithHighestLoad, getIndividualElveLoads} from "../calories";
+import {readFileSync} from "fs";
 
-describe('getIndividualElveLoads', () => {
-    it('returns an array of arrays where each represent single elf load', () => {
-        const loads = "9195\n" +
-            "5496\n" +
-            "2732\n" +
-            "8364\n" +
-            "3703\n" +
-            "3199\n" +
-            "7177\n" +
-            "1659\n" +
-            "\n" +
-            "7307\n" +
-            "2177\n" +
-            "1011\n" +
-            "8678\n" +
-            "14080"
+describe('Advent of code 2022 day1', () => {
+    describe('findElfWithHighestLoad', () => {
+        it('returns the the calories count of the elf with highest load of calories', () => {
+            const load = `1000
+2000
+3000
 
-        expect(getIndividualElveLoads(loads)).toEqual([[9195,
-            5496,
-            2732,
-            8364,
-            3703,
-            3199,
-            7177,
-            1659],[7307,
-            2177,
-            1011,
-            8678,
-            14080]])
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000`;
+            const actual = findElfWithHighestLoad(getIndividualElveLoads(load));
+            expect(actual).toBe(24000);
+        });
+
+        it('returns the the calories count of the elf with highest load of calories based on the real data input', () => {
+            const load = readFileSync('2022/01/load.txt', {encoding: 'utf8', flag: 'r'});
+            const actual = findElfWithHighestLoad(getIndividualElveLoads(load));
+            expect(actual).toBe(69281);
+        });
+    });
+
+    describe('findTopThreeElvesWithHighestLoad', () => {
+        it('returns the the calories count of the 3 elves with highest load of calories', () => {
+            const load = `1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000`;
+            const actual = findTopThreeElvesWithHighestLoad(getIndividualElveLoads(load));
+            expect(actual).toBe(45000);
+        });
+
+        it('returns the the calories count of the 3 elves with highest load of calories based on the real data input', () => {
+            const load = readFileSync('2022/01/load.txt', {encoding: 'utf8', flag: 'r'});
+            const actual = findTopThreeElvesWithHighestLoad(getIndividualElveLoads(load));
+            expect(actual).toBe(201524);
+        });
     });
 });
+
+
