@@ -36,6 +36,15 @@ export const getBadges = (input: string) => {
         }
     }
 
+    // for (let i = 0; i < r.length; i += 3) {
+    //     for (const item of r[i]) {
+    //         if (r[i + 1].includes(item) && r[i + 2].includes(item)) {
+    //             badges.push(item);
+    //             break;
+    //         }
+    //     }
+    // }
+
     return badges.reduce((sum, item) => sum + PRIORITIES.indexOf(item), 0);
 };
 
