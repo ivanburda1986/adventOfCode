@@ -1,20 +1,41 @@
-// 1 rucksack has 2 compartments
-// all items of a type should go into a single compartment
-// always 1 item per rucksack is misplaced
-// each individual rucksack has the same number of items in both compartments
+const PRIORITIES = '0abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+export const getSharedItem = (rucksack: string) => {
+    const compartment1 = rucksack.slice(0, rucksack.length / 2).split("");
+    const compartment2 = rucksack.slice(rucksack.length / 2).split("");
 
-// a list of all of the items currently in each rucksack
+    for (const item of compartment1) {
+        if (compartment2.includes(item)) {
+            return item;
+        }
+    }
 
-// vJrwpWtwJgWrhcsFMMfFFhFp
-// jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
-// PmmdzqPrVvPwwTWBwg
-// wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
-// ttgJtRGJQctTZtZT
-// CrZsJsPPZsGzwwsLwLmpwMDw
+    return '0';
+};
 
-// first half of items = 1st compartment, the second half = 2nd comp.
+export const getPrioritySum = (input: string) =>
+    input
+        .split(`\n`)
+        .map((rucksack) => getSharedItem(rucksack))
+        .reduce((sum, item) => sum + PRIORITIES.indexOf(item), 0);
 
+export const getBadges = (input: string) => {
+    const badges = [];
 
-// Find the item type that appears in both compartments of each rucksack.
-//     What is the sum of the priorities of those item types?
+    const rucksacks = input.split(`\n`);
+    for (let i = 0; i < rucksacks.length; i += 3) {
+        const r1 = rucksacks[i];
+        const r2 = rucksacks[i + 1];
+        const r3 = rucksacks[i + 2];
+
+        for (const item of r1) {
+            if (r2.includes(item) && r3.includes(item)) {
+                badges.push(item);
+                break;
+            }
+        }
+    }
+
+    return badges.reduce((sum, item) => sum + PRIORITIES.indexOf(item), 0);
+};
+
