@@ -24,3 +24,15 @@ export const isSubPair = (pair: string[]) => {
     assignments.sort((a, b) => a.length - b.length);
     return assignments[1].includes(assignments[0]);
 };
+
+export const countSubPairs = (allAssignments: string): number => {
+    let count = 0;
+    getPairs(allAssignments).forEach((assignmentPair) => {
+        if (isSubPair(assignmentPair)) {
+            count += 1;
+            return;
+        }
+    });
+    return count;
+};
+

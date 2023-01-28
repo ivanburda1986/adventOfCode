@@ -1,24 +1,18 @@
-import {getAssignmentNumbers, getPairs, isSubPair} from "../cleaning";
+import {countSubPairs, getAssignmentNumbers, getPairs, isSubPair} from "../cleaning";
+import {readFileSync} from "fs";
 
-const ALL_ASSIGNMENTS = `2-4,6-8
+const ALL_ASSIGNMENTS_EXAMPLE = `2-4,6-8
 2-3,4-5
 5-7,7-9
 2-8,3-7
 6-6,4-6
 2-6,4-8`;
 
-const a = `46-89,45-46
-11-87,10-88
-3-88,3-4
-19-46,47-93
-23-60,22-84
-22-84,21-94
-1-3,18-81`;
 
 describe('Advent of code 2022, day 4', () => {
     describe('getPairs', () => {
         it('returns assignment pairs', () => {
-            expect(getPairs(ALL_ASSIGNMENTS)).toStrictEqual([["2-4", "6-8"], ["2-3", "4-5"], ["5-7", "7-9"], ["2-8", "3-7"], ["6-6", "4-6"], ["2-6", "4-8"]]);
+            expect(getPairs(ALL_ASSIGNMENTS_EXAMPLE)).toStrictEqual([["2-4", "6-8"], ["2-3", "4-5"], ["5-7", "7-9"], ["2-8", "3-7"], ["6-6", "4-6"], ["2-6", "4-8"]]);
         });
     });
 
@@ -33,5 +27,17 @@ describe('Advent of code 2022, day 4', () => {
             expect(isSubPair(["2-6", "1-9"])).toBe(true);
         });
     });
+
+    describe('countSubPairs', () => {
+        it('countSubPairs returns number of pairs where the subpair condition is fulfilled ', () => {
+            expect(countSubPairs(ALL_ASSIGNMENTS_EXAMPLE)).toBe(2);
+        });
+
+        it('countSubPairs returns number of pairs where the subpair condition is fulfilled - real data', () => {
+            const assignments = readFileSync('2022/04/cleaningAssignments.txt', {encoding: 'utf8', flag: 'r'});
+            expect(countSubPairs(assignments)).toBe(1);
+        });
+    });
+
 
 });
