@@ -5,7 +5,7 @@
 
 
 export const getPairs = (allAssignments: string) => {
-    return allAssignments.split('\n').map((pair) => pair.split(','));
+    return allAssignments.split('\n').map((pair) => pair.split(',')).filter((item) => !item.includes(""));
 };
 
 export const getAssignmentNumbers = (assignment: string) => {
