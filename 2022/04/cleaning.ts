@@ -4,31 +4,71 @@
 //take the smaller array and find out whether it is fully contained in the longer one
 
 
-export const getPairs = (allAssignments: string) => {
-    return allAssignments.split('\n').map((pair) => pair.split(',')).filter((item) => !item.includes(""));
-};
+export const isFullyContained = (data: string): boolean => {
+    const [, s1, e1, s2, e2] = data.match(/(\d+)-(\d+),(\d+)-(\d+)/) ?? [];
+    const s1n = parseInt(s1);
+    const s2n = parseInt(s2);
+    const e1n = parseInt(e1);
+    const e2n = parseInt(e2);
 
-export const getAssignmentNumbers = (assignment: string) => {
-    let numbers = [];
-    let nums = assignment.split("-");
-    let start = parseInt(nums[0]);
-    let end = parseInt(nums[1]);
-    for (let i = start; i <= end; i++) {
-        numbers.push(i);
+    if (s1n >= s2n && e1n <= e2n) {
+        return true;
     }
-    return numbers.join("");
+
+    if (s2n >= s1n && e2n <= e1n) {
+        return true;
+    }
+
+    return false;
 };
 
-export const isSubPair = (pair: string[]) => {
-    const assignments = [getAssignmentNumbers(pair[0]), getAssignmentNumbers(pair[1])];
-    assignments.sort((a, b) => a.length - b.length);
-    return assignments[1].includes(assignments[0]);
-};
 
-export const countSubPairs = (allAssignments: string): number => {
+export const countFullyContainedPairs = (allAssignments: string): number => {
     let count = 0;
-    getPairs(allAssignments).forEach((assignmentPair) => {
-        if (isSubPair(assignmentPair)) {
+    allAssignments.split('\n').forEach((assignmentPair) => {
+        if (isFullyContained(assignmentPair)) {
+            count += 1;
+            return;
+        }
+    });
+    return count;
+};
+
+const isOverlapping = (assignmentPair: string) => {
+    const [, s1, e1, s2, e2] = assignmentPair.match(/(\d+)-(\d+),(\d+)-(\d+)/) ?? [];
+    const s1n = parseInt(s1);
+    const s2n = parseInt(s2);
+    const e1n = parseInt(e1);
+    const e2n = parseInt(e2);
+
+    if (s1n >= s2n && e1n <= e2n) {
+        return true;
+    }
+
+    if (s2n >= s1n && e2n <= e1n) {
+        return true;
+    }
+
+    if (s1n <= e2n && s1n >= s2n) {
+        return true;
+    }
+    if (s2n <= e1n && s2n >= s1n) {
+        return true;
+    }
+    if (e1n >= s2n && e1n <= e2n) {
+        return true;
+    }
+    if (s1n <= e2n && e1n >= e2n) {
+        return true;
+    }
+
+    return false;
+};
+
+export const countOverlappingPairs = (allAssignments: string): number => {
+    let count = 0;
+    allAssignments.split('\n').forEach((assignmentPair) => {
+        if (isOverlapping(assignmentPair)) {
             count += 1;
             return;
         }
