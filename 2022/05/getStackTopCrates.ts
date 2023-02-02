@@ -3,6 +3,12 @@ export enum CraneVersion {
     "Crane9001" = "Crane9001",
 }
 
+interface Instruction {
+    count: number;
+    from: number;
+    to: number;
+}
+
 export const getStackTopCrates = (instructions: string, stacks: Record<number, string[]>, craneVersion: CraneVersion): string => {
     const parsedInstructions = parseInstructions(instructions);
     parsedInstructions.forEach((instruction) => {
@@ -19,25 +25,24 @@ export const getStackTopCrates = (instructions: string, stacks: Record<number, s
     return topStackCrates.join().replace(/\s*,\s*|\s+,/g, '');
 };
 
-
-export function parseInstructions(instructions: string): number[][] {
-    const parsedInstructions: number[][] = [];
+export function parseInstructions(instructions: string): Instruction[] {
+    const parsedInstructions: Instruction[] = [];
     instructions.split("\n").forEach((instruction) => {
         const [, count, from, to] = instruction.match(/move (\d+) from (\d+) to (\d+)/) ?? [];
-        parsedInstructions.push([parseInt(count), parseInt(from), parseInt(to)]);
+        parsedInstructions.push({count: parseInt(count), from: parseInt(from), to: parseInt(to)});
     });
 
     return parsedInstructions;
 }
 
-function executeSingleInstructionByCrateMover9000(instruction: number[], stacks: Record<number, string[]>) {
-    for (let i = instruction[0]; i--; i > 0) {
-        const movingItem = stacks[instruction[1]].pop() ?? "";
-        stacks[instruction[2]].push(movingItem);
+function executeSingleInstructionByCrateMover9000(instruction: Instruction, stacks: Record<number, string[]>) {
+    for (let i = instruction.count; i--; i > 0) {
+        const movingItem = stacks[instruction.from].pop() ?? "";
+        stacks[instruction.to].push(movingItem);
     }
 }
 
-function executeSingleInstructionByCrateMover9001(instruction: number[], stacks: Record<number, string[]>) {
-    const movingItems = stacks[instruction[1]].splice(-instruction[0]) ?? "";
-    stacks[instruction[2]].push(...movingItems);
+function executeSingleInstructionByCrateMover9001(instruction: Instruction, stacks: Record<number, string[]>) {
+    const movingItems = stacks[instruction.from].splice(-instruction.count) ?? "";
+    stacks[instruction.to].push(...movingItems);
 }
