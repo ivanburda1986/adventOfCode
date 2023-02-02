@@ -1,7 +1,6 @@
 export enum CraneVersion {
     "Crane9000" = "Crane9000",
     "Crane9001" = "Crane9001",
-
 }
 
 export const getStackTopCrates = (instructions: string, stacks: Record<number, string[]>, craneVersion: CraneVersion): string => {
@@ -27,6 +26,7 @@ export function parseInstructions(instructions: string): number[][] {
         const [, count, from, to] = instruction.match(/move (\d+) from (\d+) to (\d+)/) ?? [];
         parsedInstructions.push([parseInt(count), parseInt(from), parseInt(to)]);
     });
+
     return parsedInstructions;
 }
 
