@@ -1,28 +1,17 @@
-const getSequenceUniqueCharCount = (startPosition: number, uniqueSequenceLength: number, signal: string): number => {
-    let sequenceUniqueChars = new Set();
-    signal.slice(startPosition, startPosition + uniqueSequenceLength).split('').forEach((char) => sequenceUniqueChars.add(char));
-    return sequenceUniqueChars.size;
+const isCheckedSequenceDistinct = (checkFromSignalPosition: number, requiredDistinctSequenceLength: number, signal: string): boolean => {
+    let sequenceDistinctChars = new Set();
+    signal.slice(checkFromSignalPosition, checkFromSignalPosition + requiredDistinctSequenceLength).split('').forEach((char) => sequenceDistinctChars.add(char));
+    return sequenceDistinctChars.size === requiredDistinctSequenceLength;
 };
 
-export const getPacketStartPosition = (uniqueSequenceLength: number, signal: string): number => {
-    let startPosition = 0;
+export const getStartMarkerPosition = (requiredDistinctSequenceLength: number, signal: string): number => {
+    let checkFromSignalPosition = 0;
 
-    while (getSequenceUniqueCharCount(startPosition, uniqueSequenceLength, signal) < uniqueSequenceLength) {
-        startPosition += 1;
-        getSequenceUniqueCharCount(startPosition, uniqueSequenceLength, signal);
+    while (!isCheckedSequenceDistinct(checkFromSignalPosition, requiredDistinctSequenceLength, signal)) {
+        checkFromSignalPosition += 1;
+        isCheckedSequenceDistinct(checkFromSignalPosition, requiredDistinctSequenceLength, signal);
     }
 
-    return startPosition + uniqueSequenceLength;
-};
-
-export const getMessageStartPosition = (uniqueSequenceLength: number, signal: string): number => {
-    let startPosition = 0;
-
-    while (getSequenceUniqueCharCount(startPosition, uniqueSequenceLength, signal) < uniqueSequenceLength) {
-        startPosition += 1;
-        getSequenceUniqueCharCount(startPosition, uniqueSequenceLength, signal);
-    }
-
-    return startPosition + uniqueSequenceLength;
+    return checkFromSignalPosition + requiredDistinctSequenceLength;
 };
 
