@@ -21,17 +21,17 @@ export const isTreeVisible = (forest: string, cordX: string, cordY: string) => {
     const wholeForest = getForest(forest);
     const forestCenter = getForestCenter(forest);
     const evaluatedTree = forestCenter[y][x];
-    const up = parseInt(wholeForest[y][x + 1]);
-    const down = parseInt(wholeForest[y + 2][x + 1]);
-    const left = parseInt(wholeForest[y + 1][x]);
-    const right = parseInt(wholeForest[y + 1][x + 2]);
+    const up = [parseInt(wholeForest[y][x + 1])];
+    const down = [parseInt(wholeForest[y + 2][x + 1])];
+    const left = [parseInt(wholeForest[y + 1][x])];
+    const right = [parseInt(wholeForest[y + 1][x + 2])];
     const surroundingTrees = [up, left, right, down];
     let shorterTrees: number[] = [];
-    surroundingTrees.forEach((tree) => {
-        if (tree >= parseInt(evaluatedTree)) {
-            shorterTrees.push(tree);
-        }
-    });
+    // surroundingTrees.forEach((tree) => {
+    //     if (tree >= parseInt(evaluatedTree)) {
+    //         shorterTrees.push(tree);
+    //     }
+    // });
     return shorterTrees.length === 4;
 };
 
