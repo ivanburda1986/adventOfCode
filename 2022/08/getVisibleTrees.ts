@@ -1,73 +1,102 @@
-export const getForestCenter = (forest: string) => {
-    const forestRows = forest.split(`\n`);
-    forestRows.pop();
-    forestRows.shift();
-    const forestCenter: string[][] = [];
-    forestRows.forEach((row) => forestCenter.push(row.slice(1, -1).split("")));
-    return forestCenter;
-};
-
 export const getForest = (forest: string) => {
-    const forestRows = forest.split(`\n`);
-    const wholeForest: string[][] = [];
-    forestRows.forEach((row) => wholeForest.push(row.split("")));
-    return wholeForest;
+    return forest.split(`\n`).map((line) => line.split("").map((n) => parseInt(n)));
 };
 
 
-export const isTreeVisible = (forest: string, cordX: string, cordY: string) => {
-    const x: number = parseInt(cordX);
-    const y: number = parseInt(cordY);
-    const wholeForest = getForest(forest);
-    const forestCenter = getForestCenter(forest);
-    const evaluatedTree = forestCenter[y][x];
-    const up = [parseInt(wholeForest[y][x + 1])];
-    const down = [parseInt(wholeForest[y + 2][x + 1])];
-    const left = [parseInt(wholeForest[y + 1][x])];
-    const right = [parseInt(wholeForest[y + 1][x + 2])];
-    const surroundingTrees = [up, left, right, down];
-    let shorterTrees: number[] = [];
-    // surroundingTrees.forEach((tree) => {
-    //     if (tree >= parseInt(evaluatedTree)) {
-    //         shorterTrees.push(tree);
-    //     }
-    // });
-    return shorterTrees.length === 4;
-};
+export const getVisibleTrees = (input: string) => {
+    let visibleTrees = 0;
+    const forest = getForest(input);
+    console.log(forest);
+    for (let y = 1; y < forest.length - 1; y++) {
+        const forestRow = forest[1];
+        for (let x = 1; x < forestRow.length - 1; x++) {
+            let currentTree = forest[y][x];
+            let treeIsVisibleFromTop = true;
+            let treeIsVisibleFromRight = true;
+            let treeIsVisibleFromBottom = true;
+            let treeIsVisibleFromLeft = true;
+            //top
+            for (let tY = 0; tY < y; tY++) {
+                if (forest[tY][x] >= currentTree) {
+                    treeIsVisibleFromTop = false;
+                }
+            }
 
-export const getVisibleTrees = (forest: string): number => {
-    const forestCenter = getForestCenter(forest);
-    const centerLong = forestCenter.length;
-    const centerWide = forestCenter[0].length;
+            //right
+            for (let tX = x + 1; tX < forestRow.length; tX++) {
+                if (forest[y][tX] >= currentTree) {
+                    treeIsVisibleFromRight = false;
+                }
+            }
+            //bottom
+            for (let tY = y + 1; tY < forest.length; tY++) {
+                if (forest[tY][x] >= currentTree) {
+                    treeIsVisibleFromBottom = false;
+                }
+            }
+            //left
+            for (let tX = 0; tX < x; tX++) {
+                if (forest[y][tX] >= currentTree) {
+                    treeIsVisibleFromLeft = false;
 
-    let visibleTrees = (centerWide + 2) * 2 + centerLong * 2;
-    for (let y = 0; y < centerLong; y++) {
-        for (let x = 0; x < centerWide; x++) {
-            if (isTreeVisible(forest, x.toString(), y.toString())) {
-                visibleTrees++;
+                }
+            }
+            if (treeIsVisibleFromTop || treeIsVisibleFromRight || treeIsVisibleFromBottom || treeIsVisibleFromLeft) {
+                visibleTrees += 1;
             }
         }
     }
-    return visibleTrees;
+    return visibleTrees + (2 * forest.length) + (2 * (forest[0].length - 2));
 };
 
+export const getScenicScore = (input: string) => {
+    let visibleTrees = 0;
+    const forest = getForest(input);
+    let maxScenicScore = 0;
+    console.log(forest);
+    for (let y = 1; y < forest.length - 1; y++) {
+        const forestRow = forest[1];
+        for (let x = 1; x < forestRow.length - 1; x++) {
+            let currentTree = forest[y][x];
+            let visibleTreesTop = 0;
+            let visibleTreesRight = 0;
+            let visibleTreesBottom = 0;
+            let visibleTreesLeft = 0;
 
-const forest = [[3, 0, 3, 7, 3],
-    [2, 5, 5, 1, 2],
-    [6, 5, 3, 3, 2],
-    [3, 3, 5, 4, 9],
-    [3, 5, 3, 9, 0]];
+            //top
+            for (let tY = y - 1; tY >= 0; tY--) {
+                visibleTreesTop++;
+                if (forest[tY][x] >= currentTree) {
+                    break;
+                }
+            }
 
-const center = [[5, 5, 1],
-    [5, 3, 3],
-    [3, 5, 4]];
-
-
-/*
-split each line into an array of numbers
-for each number
-forest[position in center -1][position in center array+1]
-position in center [-1]
-position in center [+1]
-forest[position in center +1][position in center array+1]
- */
+            //right
+            for (let tX = x + 1; tX < forestRow.length; tX++) {
+                visibleTreesRight++;
+                if (forest[y][tX] >= currentTree) {
+                    break;
+                }
+            }
+            //bottom
+            for (let tY = y + 1; tY < forest.length; tY++) {
+                visibleTreesBottom++;
+                if (forest[tY][x] >= currentTree) {
+                    break;
+                }
+            }
+            //left
+            for (let tX = x - 1; tX >= 0; tX--) {
+                visibleTreesLeft++;
+                if (forest[y][tX] >= currentTree) {
+                    break;
+                }
+            }
+            let scenicScore = visibleTreesTop * visibleTreesRight * visibleTreesBottom * visibleTreesLeft;
+            if (scenicScore > maxScenicScore) {
+                maxScenicScore = scenicScore;
+            }
+        }
+    }
+    return maxScenicScore;
+};
