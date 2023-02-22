@@ -9,97 +9,132 @@ export const getTailTouchedPositions = (input: string): number => {
         }
     });
 
-    const headCoordinates = {
-        x: 0,
-        y: 0
+    const rope = {
+        HEAD: {
+            x: 0,
+            y: 0
+        },
+        1: {
+            x: 0,
+            y: 0
+        },
+        2: {
+            x: 0,
+            y: 0
+        },
+        3: {
+            x: 0,
+            y: 0
+        },
+        4: {
+            x: 0,
+            y: 0
+        },
+        5: {
+            x: 0,
+            y: 0
+        },
+        6: {
+            x: 0,
+            y: 0
+        },
+        7: {
+            x: 0,
+            y: 0
+        },
+        8: {
+            x: 0,
+            y: 0
+        },
+        TAIL: {
+            x: 0,
+            y: 0
+        },
     };
-    const tailCoordinates = {
-        x: 0,
-        y: 0
-    };
+
 
     const uniqueTailCoordinates = new Set();
     uniqueTailCoordinates.add('x0#y0'); // starting-point coordinate
     function trackTailMovement() {
-        uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+        uniqueTailCoordinates.add(`x${rope.TAIL.x}#y${rope.TAIL.y}`);
     }
 
     function moveTail() {
-        const shouldFollowHeadRight = headCoordinates.y - tailCoordinates.y === 0 && headCoordinates.x - tailCoordinates.x === 2;
+        const shouldFollowHeadRight = rope.HEAD.y - rope.TAIL.y === 0 && rope.HEAD.x - rope.TAIL.x === 2;
         if (shouldFollowHeadRight) {
-            tailCoordinates.x += 1;
+            rope.TAIL.x += 1;
             trackTailMovement();
         }
 
-        const shouldFollowHeadLeft = headCoordinates.y - tailCoordinates.y === 0 && headCoordinates.x - tailCoordinates.x === -2;
+        const shouldFollowHeadLeft = rope.HEAD.y - rope.TAIL.y === 0 && rope.HEAD.x - rope.TAIL.x === -2;
         if (shouldFollowHeadLeft) {
-            tailCoordinates.x -= 1;
+            rope.TAIL.x -= 1;
             trackTailMovement();
         }
-        const shouldFollowHeadUp = headCoordinates.y - tailCoordinates.y === 2 && headCoordinates.x - tailCoordinates.x === 0;
+        const shouldFollowHeadUp = rope.HEAD.y - rope.TAIL.y === 2 && rope.HEAD.x - rope.TAIL.x === 0;
         if (shouldFollowHeadUp) {
-            tailCoordinates.y += 1;
+            rope.TAIL.y += 1;
             trackTailMovement();
         }
-        const shouldFollowHeadDown = headCoordinates.y - tailCoordinates.y === -2 && headCoordinates.x - tailCoordinates.x === 0;
+        const shouldFollowHeadDown = rope.HEAD.y - rope.TAIL.y === -2 && rope.HEAD.x - rope.TAIL.x === 0;
         if (shouldFollowHeadDown) {
-            tailCoordinates.y -= 1;
+            rope.TAIL.y -= 1;
             trackTailMovement();
         }
 
 
-        const shouldFollowHeadUpAndRight = headCoordinates.y - tailCoordinates.y === 2 && headCoordinates.x - tailCoordinates.x === 1;
+        const shouldFollowHeadUpAndRight = rope.HEAD.y - rope.TAIL.y === 2 && rope.HEAD.x - rope.TAIL.x === 1;
         if (shouldFollowHeadUpAndRight) {
-            tailCoordinates.y += 1;
-            tailCoordinates.x += 1;
+            rope.TAIL.y += 1;
+            rope.TAIL.x += 1;
             trackTailMovement();
         }
-        const shouldFollowHeadUpAndRight2 = headCoordinates.y - tailCoordinates.y === 1 && headCoordinates.x - tailCoordinates.x === 2;
+        const shouldFollowHeadUpAndRight2 = rope.HEAD.y - rope.TAIL.y === 1 && rope.HEAD.x - rope.TAIL.x === 2;
         if (shouldFollowHeadUpAndRight2) {
-            tailCoordinates.y += 1;
-            tailCoordinates.x += 1;
+            rope.TAIL.y += 1;
+            rope.TAIL.x += 1;
             trackTailMovement();
         }
 
-        const shouldFollowHeadUpAndLeft = headCoordinates.y - tailCoordinates.y === 2 && headCoordinates.x - tailCoordinates.x === -1;
+        const shouldFollowHeadUpAndLeft = rope.HEAD.y - rope.TAIL.y === 2 && rope.HEAD.x - rope.TAIL.x === -1;
         if (shouldFollowHeadUpAndLeft) {
-            tailCoordinates.y += 1;
-            tailCoordinates.x -= 1;
+            rope.TAIL.y += 1;
+            rope.TAIL.x -= 1;
             trackTailMovement();
         }
-        const shouldFollowHeadUpAndLeft2 = headCoordinates.y - tailCoordinates.y === 1 && headCoordinates.x - tailCoordinates.x === -2;
+        const shouldFollowHeadUpAndLeft2 = rope.HEAD.y - rope.TAIL.y === 1 && rope.HEAD.x - rope.TAIL.x === -2;
         if (shouldFollowHeadUpAndLeft2) {
-            tailCoordinates.y += 1;
-            tailCoordinates.x -= 1;
+            rope.TAIL.y += 1;
+            rope.TAIL.x -= 1;
             trackTailMovement();
         }
 
 
-        const shouldFollowHeadDownAndRight = headCoordinates.y - tailCoordinates.y === -2 && headCoordinates.x - tailCoordinates.x === 1;
+        const shouldFollowHeadDownAndRight = rope.HEAD.y - rope.TAIL.y === -2 && rope.HEAD.x - rope.TAIL.x === 1;
         if (shouldFollowHeadDownAndRight) {
-            tailCoordinates.y -= 1;
-            tailCoordinates.x += 1;
+            rope.TAIL.y -= 1;
+            rope.TAIL.x += 1;
             trackTailMovement();
         }
-        const shouldFollowHeadDownAndRight2 = headCoordinates.y - tailCoordinates.y === -1 && headCoordinates.x - tailCoordinates.x === 2;
+        const shouldFollowHeadDownAndRight2 = rope.HEAD.y - rope.TAIL.y === -1 && rope.HEAD.x - rope.TAIL.x === 2;
         if (shouldFollowHeadDownAndRight2) {
-            tailCoordinates.y -= 1;
-            tailCoordinates.x += 1;
+            rope.TAIL.y -= 1;
+            rope.TAIL.x += 1;
             trackTailMovement();
         }
 
 
-        const shouldFollowHeadDownAndLeft = headCoordinates.y - tailCoordinates.y === -2 && headCoordinates.x - tailCoordinates.x === -1;
+        const shouldFollowHeadDownAndLeft = rope.HEAD.y - rope.TAIL.y === -2 && rope.HEAD.x - rope.TAIL.x === -1;
         if (shouldFollowHeadDownAndLeft) {
-            tailCoordinates.y -= 1;
-            tailCoordinates.x -= 1;
+            rope.TAIL.y -= 1;
+            rope.TAIL.x -= 1;
             trackTailMovement();
         }
 
-        const shouldFollowHeadDownAndLeft2 = headCoordinates.y - tailCoordinates.y === -1 && headCoordinates.x - tailCoordinates.x === -2;
+        const shouldFollowHeadDownAndLeft2 = rope.HEAD.y - rope.TAIL.y === -1 && rope.HEAD.x - rope.TAIL.x === -2;
         if (shouldFollowHeadDownAndLeft2) {
-            tailCoordinates.y -= 1;
-            tailCoordinates.x -= 1;
+            rope.TAIL.y -= 1;
+            rope.TAIL.x -= 1;
             trackTailMovement();
         }
 
@@ -107,19 +142,19 @@ export const getTailTouchedPositions = (input: string): number => {
 
     for (const letter of headMoveInstructions) {
         if (letter === "R") {
-            headCoordinates.x += 1;
+            rope.HEAD.x += 1;
         }
 
         if (letter === "L") {
-            headCoordinates.x -= 1;
+            rope.HEAD.x -= 1;
         }
 
         if (letter === "U") {
-            headCoordinates.y += 1;
+            rope.HEAD.y += 1;
         }
 
         if (letter === "D") {
-            headCoordinates.y -= 1;
+            rope.HEAD.y -= 1;
         }
         moveTail();
     }
