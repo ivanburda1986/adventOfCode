@@ -20,28 +20,31 @@ export const getTailTouchedPositions = (input: string): number => {
 
     const uniqueTailCoordinates = new Set();
     uniqueTailCoordinates.add('x0#y0'); // starting-point coordinate
-
+    function trackTailMovement() {
+        uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+    }
 
     function moveTail() {
         const shouldFollowHeadRight = headCoordinates.y - tailCoordinates.y === 0 && headCoordinates.x - tailCoordinates.x === 2;
         if (shouldFollowHeadRight) {
             tailCoordinates.x += 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
+
         const shouldFollowHeadLeft = headCoordinates.y - tailCoordinates.y === 0 && headCoordinates.x - tailCoordinates.x === -2;
         if (shouldFollowHeadLeft) {
             tailCoordinates.x -= 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
         const shouldFollowHeadUp = headCoordinates.y - tailCoordinates.y === 2 && headCoordinates.x - tailCoordinates.x === 0;
         if (shouldFollowHeadUp) {
             tailCoordinates.y += 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
         const shouldFollowHeadDown = headCoordinates.y - tailCoordinates.y === -2 && headCoordinates.x - tailCoordinates.x === 0;
         if (shouldFollowHeadDown) {
             tailCoordinates.y -= 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
 
 
@@ -49,25 +52,26 @@ export const getTailTouchedPositions = (input: string): number => {
         if (shouldFollowHeadUpAndRight) {
             tailCoordinates.y += 1;
             tailCoordinates.x += 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
-        if (headCoordinates.y - tailCoordinates.y === 1 && headCoordinates.x - tailCoordinates.x === 2) {
+        const shouldFollowHeadUpAndRight2 = headCoordinates.y - tailCoordinates.y === 1 && headCoordinates.x - tailCoordinates.x === 2;
+        if (shouldFollowHeadUpAndRight2) {
             tailCoordinates.y += 1;
             tailCoordinates.x += 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
-
 
         const shouldFollowHeadUpAndLeft = headCoordinates.y - tailCoordinates.y === 2 && headCoordinates.x - tailCoordinates.x === -1;
         if (shouldFollowHeadUpAndLeft) {
             tailCoordinates.y += 1;
             tailCoordinates.x -= 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
-        if (headCoordinates.y - tailCoordinates.y === 1 && headCoordinates.x - tailCoordinates.x === -2) {
+        const shouldFollowHeadUpAndLeft2 = headCoordinates.y - tailCoordinates.y === 1 && headCoordinates.x - tailCoordinates.x === -2;
+        if (shouldFollowHeadUpAndLeft2) {
             tailCoordinates.y += 1;
             tailCoordinates.x -= 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
 
 
@@ -75,12 +79,13 @@ export const getTailTouchedPositions = (input: string): number => {
         if (shouldFollowHeadDownAndRight) {
             tailCoordinates.y -= 1;
             tailCoordinates.x += 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
-        if (headCoordinates.y - tailCoordinates.y === -1 && headCoordinates.x - tailCoordinates.x === -2) {
+        const shouldFollowHeadDownAndRight2 = headCoordinates.y - tailCoordinates.y === -1 && headCoordinates.x - tailCoordinates.x === 2;
+        if (shouldFollowHeadDownAndRight2) {
             tailCoordinates.y -= 1;
-            tailCoordinates.x -= 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            tailCoordinates.x += 1;
+            trackTailMovement();
         }
 
 
@@ -88,12 +93,14 @@ export const getTailTouchedPositions = (input: string): number => {
         if (shouldFollowHeadDownAndLeft) {
             tailCoordinates.y -= 1;
             tailCoordinates.x -= 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            trackTailMovement();
         }
-        if (headCoordinates.y - tailCoordinates.y === -1 && headCoordinates.x - tailCoordinates.x === 2) {
+
+        const shouldFollowHeadDownAndLeft2 = headCoordinates.y - tailCoordinates.y === -1 && headCoordinates.x - tailCoordinates.x === -2;
+        if (shouldFollowHeadDownAndLeft2) {
             tailCoordinates.y -= 1;
-            tailCoordinates.x += 1;
-            uniqueTailCoordinates.add(`x${tailCoordinates.x}#y${tailCoordinates.y}`);
+            tailCoordinates.x -= 1;
+            trackTailMovement();
         }
 
     }
