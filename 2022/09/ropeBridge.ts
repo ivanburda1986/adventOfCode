@@ -1,140 +1,110 @@
 // How many positions does the tail of the rope visit at least once?
 
-export const getTailTouchedPositions = (input: string): number => {
+export const getTailTouchedPositions = (input: string, ropeLength: number): number => {
     const headMoveInstructions: string[] = [];
     input.split("\n").forEach(line => {
         const [letter, count] = line.split(" ");
-        for (let i = 0; i < Number(count); i++) {
+        for (let i = 1; i <= Number(count); i++) {
             headMoveInstructions.push(letter);
         }
     });
 
-    const rope = {
-        HEAD: {
-            x: 0,
-            y: 0
-        },
-        1: {
-            x: 0,
-            y: 0
-        },
-        2: {
-            x: 0,
-            y: 0
-        },
-        3: {
-            x: 0,
-            y: 0
-        },
-        4: {
-            x: 0,
-            y: 0
-        },
-        5: {
-            x: 0,
-            y: 0
-        },
-        6: {
-            x: 0,
-            y: 0
-        },
-        7: {
-            x: 0,
-            y: 0
-        },
-        8: {
-            x: 0,
-            y: 0
-        },
-        TAIL: {
-            x: 0,
-            y: 0
-        },
+    const rope: Record<string, Record<string, number>> = {
+        0: {x: 0, y: 0},
+        1: {x: 0, y: 0},
+        2: {x: 0, y: 0},
+        3: {x: 0, y: 0},
+        4: {x: 0, y: 0},
+        5: {x: 0, y: 0},
+        6: {x: 0, y: 0},
+        7: {x: 0, y: 0},
+        8: {x: 0, y: 0},
+        9: {x: 0, y: 0},
     };
 
-
     const uniqueTailCoordinates = new Set();
-    uniqueTailCoordinates.add('x0#y0'); // starting-point coordinate
+    uniqueTailCoordinates.add('0-0'); // starting-point coordinate xy
+
     function trackTailMovement() {
-        uniqueTailCoordinates.add(`x${rope.TAIL.x}#y${rope.TAIL.y}`);
+        uniqueTailCoordinates.add(`${rope[ropeLength - 1].x}-${rope[ropeLength - 1].y}`);
     }
 
-    function moveTail() {
-        const shouldFollowHeadRight = rope.HEAD.y - rope.TAIL.y === 0 && rope.HEAD.x - rope.TAIL.x === 2;
-        if (shouldFollowHeadRight) {
-            rope.TAIL.x += 1;
+    function moveKnot(knot: number) {
+        const shouldFollowPreviousRight = rope[knot - 1].y - rope[knot].y === 0 && rope[knot - 1].x - rope[knot].x === 2;
+        if (shouldFollowPreviousRight) {
+            rope[knot].x += 1;
             trackTailMovement();
         }
 
-        const shouldFollowHeadLeft = rope.HEAD.y - rope.TAIL.y === 0 && rope.HEAD.x - rope.TAIL.x === -2;
-        if (shouldFollowHeadLeft) {
-            rope.TAIL.x -= 1;
+        const shouldFollowPreviousLeft = rope[knot - 1].y - rope[knot].y === 0 && rope[knot - 1].x - rope[knot].x === -2;
+        if (shouldFollowPreviousLeft) {
+            rope[knot].x -= 1;
             trackTailMovement();
         }
-        const shouldFollowHeadUp = rope.HEAD.y - rope.TAIL.y === 2 && rope.HEAD.x - rope.TAIL.x === 0;
-        if (shouldFollowHeadUp) {
-            rope.TAIL.y += 1;
+        const shouldFollowPreviousUp = rope[knot - 1].y - rope[knot].y === 2 && rope[knot - 1].x - rope[knot].x === 0;
+        if (shouldFollowPreviousUp) {
+            rope[knot].y += 1;
             trackTailMovement();
         }
-        const shouldFollowHeadDown = rope.HEAD.y - rope.TAIL.y === -2 && rope.HEAD.x - rope.TAIL.x === 0;
-        if (shouldFollowHeadDown) {
-            rope.TAIL.y -= 1;
-            trackTailMovement();
-        }
-
-
-        const shouldFollowHeadUpAndRight = rope.HEAD.y - rope.TAIL.y === 2 && rope.HEAD.x - rope.TAIL.x === 1;
-        if (shouldFollowHeadUpAndRight) {
-            rope.TAIL.y += 1;
-            rope.TAIL.x += 1;
-            trackTailMovement();
-        }
-        const shouldFollowHeadUpAndRight2 = rope.HEAD.y - rope.TAIL.y === 1 && rope.HEAD.x - rope.TAIL.x === 2;
-        if (shouldFollowHeadUpAndRight2) {
-            rope.TAIL.y += 1;
-            rope.TAIL.x += 1;
-            trackTailMovement();
-        }
-
-        const shouldFollowHeadUpAndLeft = rope.HEAD.y - rope.TAIL.y === 2 && rope.HEAD.x - rope.TAIL.x === -1;
-        if (shouldFollowHeadUpAndLeft) {
-            rope.TAIL.y += 1;
-            rope.TAIL.x -= 1;
-            trackTailMovement();
-        }
-        const shouldFollowHeadUpAndLeft2 = rope.HEAD.y - rope.TAIL.y === 1 && rope.HEAD.x - rope.TAIL.x === -2;
-        if (shouldFollowHeadUpAndLeft2) {
-            rope.TAIL.y += 1;
-            rope.TAIL.x -= 1;
+        const shouldFollowPreviousDown = rope[knot - 1].y - rope[knot].y === -2 && rope[knot - 1].x - rope[knot].x === 0;
+        if (shouldFollowPreviousDown) {
+            rope[knot].y -= 1;
             trackTailMovement();
         }
 
 
-        const shouldFollowHeadDownAndRight = rope.HEAD.y - rope.TAIL.y === -2 && rope.HEAD.x - rope.TAIL.x === 1;
-        if (shouldFollowHeadDownAndRight) {
-            rope.TAIL.y -= 1;
-            rope.TAIL.x += 1;
+        const shouldFollowPreviousUpAndRight = rope[knot - 1].y - rope[knot].y === 2 && rope[knot - 1].x - rope[knot].x === 1;
+        if (shouldFollowPreviousUpAndRight) {
+            rope[knot].y += 1;
+            rope[knot].x += 1;
             trackTailMovement();
         }
-        const shouldFollowHeadDownAndRight2 = rope.HEAD.y - rope.TAIL.y === -1 && rope.HEAD.x - rope.TAIL.x === 2;
-        if (shouldFollowHeadDownAndRight2) {
-            rope.TAIL.y -= 1;
-            rope.TAIL.x += 1;
+        const shouldFollowPreviousUpAndRight2 = rope[knot - 1].y - rope[knot].y === 1 && rope[knot - 1].x - rope[knot].x === 2;
+        if (shouldFollowPreviousUpAndRight2) {
+            rope[knot].y += 1;
+            rope[knot].x += 1;
+            trackTailMovement();
+        }
+
+        const shouldFollowPreviousUpAndLeft = rope[knot - 1].y - rope[knot].y === 2 && rope[knot - 1].x - rope[knot].x === -1;
+        if (shouldFollowPreviousUpAndLeft) {
+            rope[knot].y += 1;
+            rope[knot].x -= 1;
+            trackTailMovement();
+        }
+        const shouldFollowPreviousUpAndLeft2 = rope[knot - 1].y - rope[knot].y === 1 && rope[knot - 1].x - rope[knot].x === -2;
+        if (shouldFollowPreviousUpAndLeft2) {
+            rope[knot].y += 1;
+            rope[knot].x -= 1;
             trackTailMovement();
         }
 
 
-        const shouldFollowHeadDownAndLeft = rope.HEAD.y - rope.TAIL.y === -2 && rope.HEAD.x - rope.TAIL.x === -1;
-        if (shouldFollowHeadDownAndLeft) {
-            rope.TAIL.y -= 1;
-            rope.TAIL.x -= 1;
+        const shouldFollowPreviousDownAndRight = rope[knot - 1].y - rope[knot].y === -2 && rope[knot - 1].x - rope[knot].x === 1;
+        if (shouldFollowPreviousDownAndRight) {
+            rope[knot].y -= 1;
+            rope[knot].x += 1;
+            trackTailMovement();
+        }
+        const shouldFollowPreviousDownAndRight2 = rope[knot - 1].y - rope[knot].y === -1 && rope[knot - 1].x - rope[knot].x === 2;
+        if (shouldFollowPreviousDownAndRight2) {
+            rope[knot].y -= 1;
+            rope[knot].x += 1;
             trackTailMovement();
         }
 
-        const shouldFollowHeadDownAndLeft2 = rope.HEAD.y - rope.TAIL.y === -1 && rope.HEAD.x - rope.TAIL.x === -2;
-        if (shouldFollowHeadDownAndLeft2) {
-            rope.TAIL.y -= 1;
-            rope.TAIL.x -= 1;
+
+        const shouldFollowPreviousDownAndLeft = rope[knot - 1].y - rope[knot].y === -2 && rope[knot - 1].x - rope[knot].x === -1;
+        if (shouldFollowPreviousDownAndLeft) {
+            rope[knot].y -= 1;
+            rope[knot].x -= 1;
+            trackTailMovement();
+        }
+
+        const shouldFollowPreviousDownAndLeft2 = rope[knot - 1].y - rope[knot].y === -1 && rope[knot - 1].x - rope[knot].x === -2;
+        if (shouldFollowPreviousDownAndLeft2) {
+            rope[knot].y -= 1;
+            rope[knot].x -= 1;
             trackTailMovement();
         }
 
@@ -142,22 +112,26 @@ export const getTailTouchedPositions = (input: string): number => {
 
     for (const letter of headMoveInstructions) {
         if (letter === "R") {
-            rope.HEAD.x += 1;
+            rope[0].x += 1;
         }
 
         if (letter === "L") {
-            rope.HEAD.x -= 1;
+            rope[0].x -= 1;
         }
 
         if (letter === "U") {
-            rope.HEAD.y += 1;
+            rope[0].y += 1;
         }
 
         if (letter === "D") {
-            rope.HEAD.y -= 1;
+            rope[0].y -= 1;
         }
-        moveTail();
+
+        for (let i = 1; i < ropeLength; i++) {
+            moveKnot(i);
+        }
     }
+
     return uniqueTailCoordinates.size;
 
 };
