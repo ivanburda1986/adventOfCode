@@ -1,4 +1,8 @@
 // How many positions does the tail of the rope visit at least once?
+type Rope = Record<string, Record<string, number>>
+export const visualizeRope = (rope: Rope): void => {
+
+};
 
 export const getTailTouchedPositions = (input: string, ropeLength: number): number => {
     const headMoveInstructions: string[] = [];
@@ -9,7 +13,7 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
         }
     });
 
-    const rope: Record<string, Record<string, number>> = {
+    const rope: Rope = {
         0: {x: 0, y: 0},
         1: {x: 0, y: 0},
         2: {x: 0, y: 0},
@@ -22,6 +26,8 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
         9: {x: 0, y: 0},
     };
 
+    const tailCoordinates: Record<number, Set<number>> = {};
+
     const uniqueTailCoordinates = new Set();
     uniqueTailCoordinates.add('0-0'); // starting-point coordinate xy
 
@@ -29,7 +35,7 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
         uniqueTailCoordinates.add(`${rope[ropeLength - 1].x}-${rope[ropeLength - 1].y}`);
     }
 
-    function moveKnot(knot: number) {
+    function moveKnot(knot: number, ropeLength: number) {
         const shouldFollowPreviousRight = rope[knot - 1].y - rope[knot].y === 0 && rope[knot - 1].x - rope[knot].x === 2;
         if (shouldFollowPreviousRight) {
             rope[knot].x += 1;
@@ -107,6 +113,16 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
             rope[knot].x -= 1;
             trackTailMovement();
         }
+        if (knot === ropeLength - 1) {
+            const coordinateY = rope[knot].y;
+            const coordinateX = rope[knot].x;
+
+            if (tailCoordinates[coordinateY]) {
+                tailCoordinates[coordinateY].add(coordinateX);
+            } else {
+                tailCoordinates[coordinateY] = new Set();
+            }
+        }
 
     }
 
@@ -128,10 +144,11 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
         }
 
         for (let i = 1; i < ropeLength; i++) {
-            moveKnot(i);
+            moveKnot(i, ropeLength);
         }
     }
 
+    console.log(tailCoordinates);
     return uniqueTailCoordinates.size;
 
 };
