@@ -3,9 +3,9 @@
 type Rope = Record<string, Record<string, number>>
 export const displayRope = (rope: Rope): void => {
     let display = '';
-    for (let y = 0; y < 40; y++) {
+    for (let y = 0; y <= 40; y++) {
         display += "\n";
-        for (let x = 0; x < 40; x++) {
+        for (let x = 0; x <= 40; x++) {
             let changed = false;
             for (const part in rope) {
                 if (rope[part].x === x && rope[part].y === y) {
@@ -24,8 +24,9 @@ export const displayRope = (rope: Rope): void => {
 
 
 function isTail(part: number, ropeLength: number) {
-    return part === ropeLength - 1;
+    return part === ropeLength;
 }
+
 
 export const getTailTouchedPositions = (input: string, ropeLength: number): number => {
     const headMoveInstructions: string[] = [];
@@ -48,8 +49,7 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
     };
 
 
-    const ropePartCoordinates: Rope = {
-        0: {x: 11, y: 5},
+    const rope: Rope = {
         1: {x: 11, y: 5},
         2: {x: 11, y: 5},
         3: {x: 11, y: 5},
@@ -59,81 +59,82 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
         7: {x: 11, y: 5},
         8: {x: 11, y: 5},
         9: {x: 11, y: 5},
+        10: {x: 11, y: 5},
     };
 
 
     function movePart(part: number, ropeLength: number) {
 
-        const shouldFollowPreviousRight = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === 0 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === 2;
+        const shouldFollowPreviousRight = rope[part - 1].y - rope[part].y === 0 && rope[part - 1].x - rope[part].x === 2;
         if (shouldFollowPreviousRight) {
-            ropePartCoordinates[part].x += 1;
+            rope[part].x += 1;
         }
 
-        const shouldFollowPreviousLeft = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === 0 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === -2;
+        const shouldFollowPreviousLeft = rope[part - 1].y - rope[part].y === 0 && rope[part - 1].x - rope[part].x === -2;
         if (shouldFollowPreviousLeft) {
-            ropePartCoordinates[part].x -= 1;
+            rope[part].x -= 1;
         }
-        const shouldFollowPreviousUp = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === 2 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === 0;
+        const shouldFollowPreviousUp = rope[part - 1].y - rope[part].y === 2 && rope[part - 1].x - rope[part].x === 0;
         if (shouldFollowPreviousUp) {
-            ropePartCoordinates[part].y += 1;
+            rope[part].y += 1;
         }
-        const shouldFollowPreviousDown = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === -2 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === 0;
+        const shouldFollowPreviousDown = rope[part - 1].y - rope[part].y === -2 && rope[part - 1].x - rope[part].x === 0;
         if (shouldFollowPreviousDown) {
-            ropePartCoordinates[part].y -= 1;
+            rope[part].y -= 1;
         }
 
 
-        const shouldFollowPreviousUpAndRight = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === 2 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === 1;
+        const shouldFollowPreviousUpAndRight = rope[part - 1].y - rope[part].y === 2 && rope[part - 1].x - rope[part].x === 1;
         if (shouldFollowPreviousUpAndRight) {
-            ropePartCoordinates[part].y += 1;
-            ropePartCoordinates[part].x += 1;
+            rope[part].y += 1;
+            rope[part].x += 1;
         }
-        const shouldFollowPreviousUpAndRight2 = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === 1 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === 2;
+        const shouldFollowPreviousUpAndRight2 = rope[part - 1].y - rope[part].y === 1 && rope[part - 1].x - rope[part].x === 2;
         if (shouldFollowPreviousUpAndRight2) {
-            ropePartCoordinates[part].y += 1;
-            ropePartCoordinates[part].x += 1;
+            rope[part].y += 1;
+            rope[part].x += 1;
         }
 
-        const shouldFollowPreviousUpAndLeft = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === 2 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === -1;
+        const shouldFollowPreviousUpAndLeft = rope[part - 1].y - rope[part].y === 2 && rope[part - 1].x - rope[part].x === -1;
         if (shouldFollowPreviousUpAndLeft) {
-            ropePartCoordinates[part].y += 1;
-            ropePartCoordinates[part].x -= 1;
+            rope[part].y += 1;
+            rope[part].x -= 1;
         }
-        const shouldFollowPreviousUpAndLeft2 = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === 1 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === -2;
+        const shouldFollowPreviousUpAndLeft2 = rope[part - 1].y - rope[part].y === 1 && rope[part - 1].x - rope[part].x === -2;
         if (shouldFollowPreviousUpAndLeft2) {
-            ropePartCoordinates[part].y += 1;
-            ropePartCoordinates[part].x -= 1;
+            rope[part].y += 1;
+            rope[part].x -= 1;
         }
 
 
-        const shouldFollowPreviousDownAndRight = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === -2 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === 1;
+        const shouldFollowPreviousDownAndRight = rope[part - 1].y - rope[part].y === -2 && rope[part - 1].x - rope[part].x === 1;
         if (shouldFollowPreviousDownAndRight) {
-            ropePartCoordinates[part].y -= 1;
-            ropePartCoordinates[part].x += 1;
+            rope[part].y -= 1;
+            rope[part].x += 1;
         }
-        const shouldFollowPreviousDownAndRight2 = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === -1 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === 2;
+        const shouldFollowPreviousDownAndRight2 = rope[part - 1].y - rope[part].y === -1 && rope[part - 1].x - rope[part].x === 2;
         if (shouldFollowPreviousDownAndRight2) {
-            ropePartCoordinates[part].y -= 1;
-            ropePartCoordinates[part].x += 1;
+            rope[part].y -= 1;
+            rope[part].x += 1;
         }
 
 
-        const shouldFollowPreviousDownAndLeft = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === -2 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === -1;
+        const shouldFollowPreviousDownAndLeft = rope[part - 1].y - rope[part].y === -2 && rope[part - 1].x - rope[part].x === -1;
         if (shouldFollowPreviousDownAndLeft) {
-            ropePartCoordinates[part].y -= 1;
-            ropePartCoordinates[part].x -= 1;
+            rope[part].y -= 1;
+            rope[part].x -= 1;
         }
 
-        const shouldFollowPreviousDownAndLeft2 = ropePartCoordinates[part - 1].y - ropePartCoordinates[part].y === -1 && ropePartCoordinates[part - 1].x - ropePartCoordinates[part].x === -2;
+        const shouldFollowPreviousDownAndLeft2 = rope[part - 1].y - rope[part].y === -1 && rope[part - 1].x - rope[part].x === -2;
         if (shouldFollowPreviousDownAndLeft2) {
-            ropePartCoordinates[part].y -= 1;
-            ropePartCoordinates[part].x -= 1;
+            rope[part].y -= 1;
+            rope[part].x -= 1;
         }
 
 
         if (isTail(part, ropeLength)) {
-            const coordinateX = ropePartCoordinates[ropeLength - 1].x;
-            const coordinateY = ropePartCoordinates[ropeLength - 1].y;
+            const coordinateX = rope[ropeLength].x;
+            const coordinateY = rope[ropeLength].y;
 
             recordTailCoordinates(coordinateX, coordinateY);
         }
@@ -142,24 +143,26 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
 
     for (const letter of headMoveInstructions) {
         if (letter === "R") {
-            ropePartCoordinates[0].x += 1;
+            rope[1].x += 1;
         }
 
         if (letter === "L") {
-            ropePartCoordinates[0].x -= 1;
+            rope[1].x -= 1;
         }
 
         if (letter === "U") {
-            ropePartCoordinates[0].y += 1;
+            rope[1].y += 1;
         }
 
         if (letter === "D") {
-            ropePartCoordinates[0].y -= 1;
+            rope[1].y -= 1;
         }
 
-        for (let i = 1; i < ropeLength; i++) {
+        for (let i = 2; i <= ropeLength; i++) {
             movePart(i, ropeLength);
         }
+
+        // headMoveInstructions.shift();
     }
 
     let tailUniqueCoordinatesCount = 0;
@@ -168,6 +171,7 @@ export const getTailTouchedPositions = (input: string, ropeLength: number): numb
             tailUniqueCoordinatesCount += tailCoordinatesRecord[tailCoordinatesRecordKey].size;
         }
     }
-    displayRope(ropePartCoordinates);
+    displayRope(rope);
+    console.log(tailCoordinatesRecord);
     return tailUniqueCoordinatesCount;
 };
