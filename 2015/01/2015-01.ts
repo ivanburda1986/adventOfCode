@@ -1,9 +1,6 @@
 export const whatFloorWillSantaGetTo = (input: string) => {
-
     let destinationFloor = 0;
-
     const instructions = input.split("");
-
 
     for (let i = 0; i < instructions.length; i++) {
         if (instructions[i] === "(") {
@@ -20,9 +17,7 @@ export const whatFloorWillSantaGetTo = (input: string) => {
 
 export const whichInstructionLeadsToMinusOneFloor = (input: string) => {
     let destinationFloor = 0;
-
     const instructions = input.split("");
-
 
     for (let i = 0; i < instructions.length; i++) {
         if (instructions[i] === "(") {
