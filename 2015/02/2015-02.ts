@@ -13,7 +13,6 @@ const parsePresentDimensions = (presentDimensions: string) => {
     };
 };
 
-
 export const getPresentPaperRequirement = (presentDimensions: string): number => {
     const {length, width, height, ascendingDimensions} = parsePresentDimensions(presentDimensions);
     return 2 * length * width + 2 * width * height + 2 * height * length + ascendingDimensions[0] * ascendingDimensions[1];
