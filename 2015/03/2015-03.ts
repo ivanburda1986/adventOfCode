@@ -1,8 +1,10 @@
+const STARTING_HOUSE_COORDINATES = [1000, 1000];
+
 export const countHousesSantaDeliversTo = (input: string): number => {
     const instructions = input.split("");
     const visitedHouses = new Set();
-    let currentHouse = [0, 0];
-    
+    let currentHouse = [...STARTING_HOUSE_COORDINATES];
+
     visitedHouses.add(currentHouse.join(""));
     instructions.forEach((instruction) => {
         if (instruction === "^") {
@@ -28,8 +30,8 @@ export const countHousesSantaAndRoboSantaDeliverTo = (input: string): number => 
     const santaInstructions = [];
     const roboSantaInstructions = [];
     const visitedHouses = new Set();
-    let santaCurrentHouse = [1000, 1000];
-    let robotSantaCurrentHouse = [1000, 1000];
+    let santaCurrentHouse = [...STARTING_HOUSE_COORDINATES];
+    let robotSantaCurrentHouse = [...STARTING_HOUSE_COORDINATES];
 
     for (let i = 0; i < allInstructions.length; i += 2) {
         santaInstructions.push(allInstructions[i]);
