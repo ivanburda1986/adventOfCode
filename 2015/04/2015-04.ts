@@ -1,15 +1,10 @@
-import MD5 from "crypto-js/md5";
+import * as crypto from "crypto";
 
 export const getLowestSuitableNumber = (secretKey: string, requiredMD5HashStart: string): number => {
-    let numberFound = false;
-    let number = 0;
-
-    for (let i = number; !numberFound; i++) {
-        const md5Hash = MD5(`${secretKey}${i}`);
-        if (String(md5Hash).substring(0, requiredMD5HashStart.length) === requiredMD5HashStart) {
-            numberFound = true;
-            number = i;
+    for (let i = 0; true; i++) {
+        const md5Hash = crypto.createHash('md5').update(`${secretKey}${i}`).digest('hex');
+        if (md5Hash.startsWith(requiredMD5HashStart)) {
+            return i;
         }
     }
-    return number;
 };

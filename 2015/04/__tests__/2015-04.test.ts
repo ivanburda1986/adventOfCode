@@ -1,6 +1,5 @@
 import {getLowestSuitableNumber} from "../2015-04";
 
-
 describe('getLowestSuitableNumber', () => {
     it('returns 609043 as the lowest positive number without leading zeroes that prepended with a secret key abcdef produces an MD5 hash that in hexadecimal starts with at least 5 zeroes', () => {
         const secretKey = 'abcdef';
@@ -24,6 +23,6 @@ describe('getLowestSuitableNumber', () => {
     it('returns 9958218 as the lowest positive number without leading zeroes that prepended with a secret key iwrupvqb produces an MD5 hash that in hexadecimal starts with at least 6 zeroes', () => {
         const secretKey = 'iwrupvqb';
         const requiredMD5HashStart = '000000';
-        expect(getLowestSuitableNumber(secretKey, requiredMD5HashStart)).toBe(9958218);
+        expect(getLowestSuitableNumber(secretKey, requiredMD5HashStart)).toBe(9_958_218);
     });
 });
