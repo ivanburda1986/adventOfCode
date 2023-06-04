@@ -1,18 +1,3 @@
-/*
-use the binary numbers to generate two new binary numbers: gamma rate, epsilon rate
-
-gama rate
-get most common bit at each position for the numbers in the report
-the binary number you get -> decimal
-
-epsilon rate
-get least common bit at each position for the numbers in the report
-the binary number you get -> decimal
-
-power consumption: gamma rate decimal * epsilon rate decimal
- */
-
-
 export const getPowerConsumption = (input: string) => {
     const bit1Counts = new Map<number, number>();
     let inputSize = 0;
@@ -46,12 +31,6 @@ export const getPowerConsumption = (input: string) => {
 
     return (parseInt(gamaRate, 2) * parseInt(epsilonRate, 2));
 };
-/*
-go through lines 1 by one
-each time divide the lines by those with more 0 and those with more 1 bits
-go
- */
-
 
 export const getDividedBinaries = (input: string[], position: number): { dominant: string[], weak: string[] } => {
     const withZero: string[] = [];

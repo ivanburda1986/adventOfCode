@@ -1,7 +1,7 @@
 import {getPowerConsumption, getRatings} from "../2021-03";
 import {readFileSync} from "fs";
 
-describe('', () => {
+describe('AOC-2021-03', () => {
     describe('getPowerConsumption', () => {
         it('returns 198 power consumption for the sample input', () => {
             const input = `
