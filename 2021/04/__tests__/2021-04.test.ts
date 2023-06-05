@@ -1,9 +1,10 @@
 import {getScore} from "../2021-04";
+import {readFileSync} from "fs";
 
 describe('AOC-2021-04', () => {
     it('returns score of 4512 for the sample input', () => {
         const input = `7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
-
+        
 22 13 17 11  0
  8  2 23  4 24
 21  9 14 16  7
@@ -21,6 +22,12 @@ describe('AOC-2021-04', () => {
 18  8 23 26 20
 22 11 13  6  5
  2  0 12  3  7`;
+
         expect(getScore(input)).toBe(4512);
+    });
+
+    it('returns score of 49686 for the real input', () => {
+        const input = readFileSync('2021/04/2021-04.txt', {encoding: 'utf8', flag: 'r'});
+        expect(getScore(input)).toBe(49686);
     });
 });
