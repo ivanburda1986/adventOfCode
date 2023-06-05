@@ -1,43 +1,25 @@
-/*
-Get board by splitting after a space
-Represent each board as a two-dimensional matrix
-Each entry in the board must have a bool about being checked
-Iterate over drawn numbers:
-- go through all boards and marked the drawn number as checked
-- find out whether there is a winning board
-
-If a winning board found
-- stop iterating
-- calculate score of the winning board by summing all non-marked numbers in it and then multiply the total by the winning drawn number
-*/
-
-
 import {defaultDict} from "../../utils/defaultDictionary";
-import {log} from "util";
-
 
 export const getScore = (input: string) => {
-    const [drawnNumbers, ...boards] = input.split("\n\n");
-    const myBoards = boards.map(board => new BingoBoard(board));
-    const numbers = drawnNumbers.split(',').map(Number);
-    let isWinner = false;
-    let lastNum = 0;
-    let score;
+    const [rawDrawnNumbers, ...rawBoards] = input.split("\n\n");
+    const boards = rawBoards.map(board => new BingoBoard(board));
+    const drawnNumbers = rawDrawnNumbers.split(',').map(Number);
+    let isWinningBoardKnown = false;
+    let score = 0;
 
-    numbers.forEach(number => {
-        lastNum = number;
-        myBoards.forEach(board => {
-            if (!isWinner) {
-                board.check(number);
+    drawnNumbers.forEach(drawnNumber => {
+        boards.forEach(board => {
+            if (!isWinningBoardKnown) {
+                board.check(drawnNumber);
                 if (board.isWinning()) {
-                    isWinner = true;
-                    score = board.getScore() * lastNum;
+                    isWinningBoardKnown = true;
+                    score = board.getScore(drawnNumber);
                 }
             }
         });
     });
 
-    if (isWinner) {
+    if (isWinningBoardKnown) {
         return score;
     }
 
@@ -57,8 +39,8 @@ export class BingoBoard {
         });
     }
 
-    getScore() {
-        return Array.from(this.board.keys()).filter(k => !this.checkedNumbers.includes(k)).reduce((n, total) => total + n, 0);
+    getScore(drawnNumber: number) {
+        return Array.from(this.board.keys()).filter(k => !this.checkedNumbers.includes(k)).reduce((n, total) => total + n, 0) * drawnNumber;
     }
 
     check(number: number) {
