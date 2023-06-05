@@ -1,34 +1,53 @@
 import {defaultDict} from "../../utils/defaultDictionary";
 
-export const getScore = (input: string) => {
+
+const getParsedInput = (input: string) => {
     const [rawDrawnNumbers, ...rawBoards] = input.split("\n\n");
-    const boards = rawBoards.map(board => new BingoBoard(board));
+    const boards = rawBoards.map(board => new Board(board));
     const drawnNumbers = rawDrawnNumbers.split(',').map(Number);
-    let isWinningBoardKnown = false;
+    return {
+        boards, drawnNumbers
+    };
+};
+
+export const getScore = (input: string, considerLastWinningBoard: boolean = false) => {
+    const {boards, drawnNumbers} = getParsedInput(input);
+    let isFirstWinningBoardKnown = false;
+    let lastDrawnNumber;
+    let winningBoardsCount = 0;
     let score = 0;
 
     drawnNumbers.forEach(drawnNumber => {
+        lastDrawnNumber = drawnNumber;
         boards.forEach(board => {
-            if (!isWinningBoardKnown) {
+            if (!considerLastWinningBoard && !isFirstWinningBoardKnown) {
                 board.check(drawnNumber);
                 if (board.isWinning()) {
-                    isWinningBoardKnown = true;
-                    score = board.getScore(drawnNumber);
+                    isFirstWinningBoardKnown = true;
+                    score = board.calculateScore(drawnNumber);
+                }
+            }
+            if (considerLastWinningBoard && winningBoardsCount < boards.length) {
+                board.check(drawnNumber);
+                if (board.isWinning()) {
+                    winningBoardsCount++;
+                    score = board.calculateScore(drawnNumber);
+                    console.log(score);
                 }
             }
         });
     });
 
-    if (isWinningBoardKnown) {
+    if (isFirstWinningBoardKnown) {
         return score;
     }
 
-
+    return score;
 };
 
-export class BingoBoard {
-    private checkedColumns = defaultDict(0);
-    private checkedRows = defaultDict(0);
+export class Board {
+    private columnChecks = defaultDict(0);
+    private rowChecks = defaultDict(0);
     private checkedNumbers: number[] = [];
     public board: Map<number, [number, number]> = new Map();
 
@@ -39,8 +58,11 @@ export class BingoBoard {
         });
     }
 
-    getScore(drawnNumber: number) {
-        return Array.from(this.board.keys()).filter(k => !this.checkedNumbers.includes(k)).reduce((n, total) => total + n, 0) * drawnNumber;
+    calculateScore(winningDrawnNumber: number) {
+        console.log(this.board);
+        console.log(Array.from(this.board.keys()).filter(boardNumber => !this.checkedNumbers.includes(boardNumber)).reduce((n, total) => total + n, 0));
+        console.log(winningDrawnNumber);
+        return Array.from(this.board.keys()).filter(boardNumber => !this.checkedNumbers.includes(boardNumber)).reduce((n, total) => total + n, 0) * winningDrawnNumber;
     }
 
     check(number: number) {
@@ -50,22 +72,22 @@ export class BingoBoard {
         }
         this.checkedNumbers.push(number);
         // @ts-ignore
-        this.checkedRows[x]++;
+        this.rowChecks[x]++;
         // @ts-ignore
-        this.checkedColumns[y]++;
+        this.columnChecks[y]++;
     }
 
     isWinning(): boolean {
-        for (const key in this.checkedColumns) {
+        for (const key in this.columnChecks) {
             // @ts-ignore
-            if (this.checkedColumns[key] === 5) {
+            if (this.columnChecks[key] === 5) {
 
                 return true;
             }
         }
-        for (const key in this.checkedRows) {
+        for (const key in this.rowChecks) {
             // @ts-ignore
-            if (this.checkedRows[key] === 5) {
+            if (this.rowChecks[key] === 5) {
 
                 return true;
             }
