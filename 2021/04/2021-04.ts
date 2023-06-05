@@ -12,27 +12,59 @@ If a winning board found
 */
 
 
-const getDrawnNumbers = (drawnNumbers: string): number[] => {
-    const result: number[] = [];
-    drawnNumbers.split(',').forEach(n => result.push(Number(n)));
-    return result;
+import {defaultDict} from "../../utils/defaultDictionary";
+
+export const getScore = (input: string) => {
+    const [drawnNumbers, ...boards] = input.split("\n\n");
+    const myBoards = boards.map(board => new BingoBoard(board));
+    drawnNumbers.split(',').map(Number).forEach(number => {
+        myBoards.forEach(board => {
+            board.check(number);
+            board.isWinning();
+        });
+
+    });
+
 };
 
-export const getBoards = (boardsInput: string) => {
-    const boards: [number?, boolean?][][] = [
-        [[], [], [], [], []],
-        [[], [], [], [], []],
-        [[], [], [], [], []],
-        [[], [], [], [], []],
-        [[], [], [], [], []],
-    ];
-    boardsInput.split("\n\n")
-        .forEach((boardInput, boardIndex) => boardInput.split('\n')
-            .forEach(boardInputRow => boardInputRow.split(' ')
-                .forEach((numberString, numberStringIndex) => boards[boardIndex][numberStringIndex].push(Number(numberString)))));
-    return boards;
-};
+export class BingoBoard {
+    private checkedColumns = defaultDict(0);
+    private checkedRows = defaultDict(0);
+    public board: Map<number, [number, number]> = new Map();
 
-export const getScore = (boardsInput: string, draw: string) => {
-    const drawnNumbers = getDrawnNumbers(draw);
-};
+    constructor(board: string) {
+        board.split('\n').forEach((line, x) => {
+            const numbers = line.trim().split(/\s+/);
+            numbers.forEach((num, y) => this.board.set(Number(num), [x, y]));
+        });
+    }
+
+    check(number: number) {
+        const [x, y] = this.board.get(number) || [null, null];
+        if (x === null) {
+            return;
+        }
+        // @ts-ignore
+        this.checkedRows[x]++;
+        // @ts-ignore
+        this.checkedColumns[y]++;
+    }
+
+    isWinning(): boolean {
+        for (const key in this.checkedColumns) {
+            // @ts-ignore
+            if (this.checkedColumns[key] === 5) {
+                console.log('win', key);
+                return true;
+            }
+        }
+        for (const key in this.checkedRows) {
+            // @ts-ignore
+            if (this.checkedRows[key] === 5) {
+                console.log('win', key);
+                return true;
+            }
+        }
+        return false;
+    }
+}

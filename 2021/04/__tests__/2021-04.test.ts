@@ -2,8 +2,9 @@ import {getScore} from "../2021-04";
 
 describe('AOC-2021-04', () => {
     it('returns score of 4512 for the sample input', () => {
-        const drawnNumbers = '7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1';
-        const boards = `22 13 17 11  0
+        const input = `7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
+
+22 13 17 11  0
  8  2 23  4 24
 21  9 14 16  7
  6 10  3 18  5
@@ -20,6 +21,6 @@ describe('AOC-2021-04', () => {
 18  8 23 26 20
 22 11 13  6  5
  2  0 12  3  7`;
-        getScore(boards, drawnNumbers).toBe(4512);
+        expect(getScore(input)).toBe(4512);
     });
 });
