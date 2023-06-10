@@ -23,7 +23,11 @@ describe('AOC-2021-05', () => {
 });
 
 /*
+Split input by line breaks
+For each line, get: [[8,0],[0,8]]
+
 Evaluate where the line is horizontal or vertical
+x === x || y === 0
 horizontal: number for x (i.e. the first number) is the same for both value
 vertical: number for y (i.e. the second number) is the same for both values
 
