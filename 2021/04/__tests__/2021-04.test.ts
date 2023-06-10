@@ -1,4 +1,4 @@
-import {getScore} from "../2021-04";
+import {getScore, getScoreLast} from "../2021-04";
 import {readFileSync} from "fs";
 
 describe('AOC-2021-04', () => {
@@ -26,6 +26,11 @@ describe('AOC-2021-04', () => {
         expect(getScore(input)).toBe(4512);
     });
 
+    it('returns score of 49686 for the 1st winning board for the real input', () => {
+        const input = readFileSync('2021/04/2021-04.txt', {encoding: 'utf8', flag: 'r'});
+        expect(getScore(input)).toBe(49686);
+    });
+
     it('returns score of 4512 for the last winning board for the sample input', () => {
         const input = `7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
 
@@ -47,11 +52,12 @@ describe('AOC-2021-04', () => {
 22 11 13  6  5
  2  0 12  3  7`;
 
-        expect(getScore(input, true)).toBe(4512);
+        expect(getScoreLast(input)).toBe(1924);
     });
 
-    it('returns score of 49686 for the real input', () => {
+    it('returns score of 26878 for the last winning board for the real input', () => {
         const input = readFileSync('2021/04/2021-04.txt', {encoding: 'utf8', flag: 'r'});
-        expect(getScore(input)).toBe(49686);
+        expect(getScoreLast(input)).toBe(26878);
     });
+
 });

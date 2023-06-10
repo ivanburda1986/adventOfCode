@@ -10,37 +10,46 @@ const getParsedInput = (input: string) => {
     };
 };
 
-export const getScore = (input: string, considerLastWinningBoard: boolean = false) => {
+export const getScore = (input: string) => {
     const {boards, drawnNumbers} = getParsedInput(input);
     let isFirstWinningBoardKnown = false;
-    let lastDrawnNumber;
-    let winningBoardsCount = 0;
+    let score = 0;
+
+    if (!isFirstWinningBoardKnown) {
+        drawnNumbers.forEach(drawnNumber => {
+            boards.forEach(board => {
+                if (!isFirstWinningBoardKnown) {
+                    board.check(drawnNumber);
+                    if (board.isWinning()) {
+                        isFirstWinningBoardKnown = true;
+                        score = board.calculateScore(drawnNumber);
+                    }
+                }
+            });
+        });
+    }
+
+
+    return score;
+};
+
+export const getScoreLast = (input: string): number => {
+    const {boards, drawnNumbers} = getParsedInput(input);
+    let myBoards = [...boards];
     let score = 0;
 
     drawnNumbers.forEach(drawnNumber => {
-        lastDrawnNumber = drawnNumber;
-        boards.forEach(board => {
-            if (!considerLastWinningBoard && !isFirstWinningBoardKnown) {
+        if (myBoards.length > 0) {
+            myBoards.forEach(board => {
                 board.check(drawnNumber);
                 if (board.isWinning()) {
-                    isFirstWinningBoardKnown = true;
+                    myBoards = myBoards.filter(({boardId}) => boardId !== board.boardId);
+                    console.log(boards);
                     score = board.calculateScore(drawnNumber);
                 }
-            }
-            if (considerLastWinningBoard && winningBoardsCount < boards.length) {
-                board.check(drawnNumber);
-                if (board.isWinning()) {
-                    winningBoardsCount++;
-                    score = board.calculateScore(drawnNumber);
-                    console.log(score);
-                }
-            }
-        });
+            });
+        }
     });
-
-    if (isFirstWinningBoardKnown) {
-        return score;
-    }
 
     return score;
 };
@@ -50,6 +59,7 @@ export class Board {
     private rowChecks = defaultDict(0);
     private checkedNumbers: number[] = [];
     public board: Map<number, [number, number]> = new Map();
+    public boardId = Math.floor(Math.random() * 1000);
 
     constructor(board: string) {
         board.split('\n').forEach((line, x) => {
@@ -59,10 +69,9 @@ export class Board {
     }
 
     calculateScore(winningDrawnNumber: number) {
-        console.log(this.board);
-        console.log(Array.from(this.board.keys()).filter(boardNumber => !this.checkedNumbers.includes(boardNumber)).reduce((n, total) => total + n, 0));
-        console.log(winningDrawnNumber);
-        return Array.from(this.board.keys()).filter(boardNumber => !this.checkedNumbers.includes(boardNumber)).reduce((n, total) => total + n, 0) * winningDrawnNumber;
+        const remainingNumbers = Array.from(this.board.keys()).filter(boardNumber => !this.checkedNumbers.includes(boardNumber));
+        const remainingNumberTotal = remainingNumbers.reduce((n, total) => total + n, 0);
+        return remainingNumberTotal * winningDrawnNumber;
     }
 
     check(number: number) {
@@ -81,14 +90,12 @@ export class Board {
         for (const key in this.columnChecks) {
             // @ts-ignore
             if (this.columnChecks[key] === 5) {
-
                 return true;
             }
         }
         for (const key in this.rowChecks) {
             // @ts-ignore
             if (this.rowChecks[key] === 5) {
-
                 return true;
             }
         }
