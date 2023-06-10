@@ -12,22 +12,21 @@ const getParsedInput = (input: string) => {
 
 export const getScore = (input: string) => {
     const {boards, drawnNumbers} = getParsedInput(input);
+    let myBoards = [...boards];
     let isFirstWinningBoardKnown = false;
     let score = 0;
 
-    if (!isFirstWinningBoardKnown) {
-        drawnNumbers.forEach(drawnNumber => {
+    drawnNumbers.forEach(drawnNumber => {
+        if (!isFirstWinningBoardKnown) {
             boards.forEach(board => {
-                if (!isFirstWinningBoardKnown) {
-                    board.check(drawnNumber);
-                    if (board.isWinning()) {
-                        isFirstWinningBoardKnown = true;
-                        score = board.calculateScore(drawnNumber);
-                    }
+                board.check(drawnNumber);
+                if (board.isWinning()) {
+                    isFirstWinningBoardKnown = true;
+                    score = board.calculateScore(drawnNumber);
                 }
             });
-        });
-    }
+        }
+    });
 
 
     return score;
