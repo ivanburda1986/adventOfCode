@@ -21,3 +21,22 @@ describe('AOC-2021-05', () => {
         expect(getOverlapCount(input)).toBe(5);
     });
 });
+
+/*
+Evaluate where the line is horizontal or vertical
+horizontal: number for x (i.e. the first number) is the same for both value
+vertical: number for y (i.e. the second number) is the same for both values
+
+For horizontal and vertical:
+ * Map where key is line X number
+ * and value is a map where key is Y and value number of vents at the position
+ * For 9,4 -> 3,4 ====>
+ * represent the range as: [[9,4],[8,4],[7,4], [5,4],[4,4],[3,4]]
+ * go over X and access the map at the X position and then access the nested map at the Y position and mark it as vent
+ * if going over Y and it is already marked as vent, increase the overall count of fields where at least 2 vents are located
+
+For diagonal
+ * For 8,0 -> 0,8 ====> [[8,0],[7,1],[6,2],[5,3],[4,4],[3,5],[2,6],[1,7],[0,8]]
+ *
+ *
+ */
