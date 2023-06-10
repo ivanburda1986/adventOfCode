@@ -10,40 +10,37 @@ const getParsedInput = (input: string) => {
     };
 };
 
-export const getScore = (input: string) => {
+export const getFirstWinningBoardScore = (input: string) => {
     const {boards, drawnNumbers} = getParsedInput(input);
-    let myBoards = [...boards];
-    let isFirstWinningBoardKnown = false;
+    let isWinningBoardKnown = false;
     let score = 0;
 
     drawnNumbers.forEach(drawnNumber => {
-        if (!isFirstWinningBoardKnown) {
+        if (!isWinningBoardKnown) {
             boards.forEach(board => {
                 board.check(drawnNumber);
                 if (board.isWinning()) {
-                    isFirstWinningBoardKnown = true;
+                    isWinningBoardKnown = true;
                     score = board.calculateScore(drawnNumber);
                 }
             });
         }
     });
 
-
     return score;
 };
 
-export const getScoreLast = (input: string): number => {
+export const getLastWinningBoardScore = (input: string): number => {
     const {boards, drawnNumbers} = getParsedInput(input);
-    let myBoards = [...boards];
+    let remainingBoards = [...boards];
     let score = 0;
 
     drawnNumbers.forEach(drawnNumber => {
-        if (myBoards.length > 0) {
-            myBoards.forEach(board => {
+        if (remainingBoards.length > 0) {
+            remainingBoards.forEach(board => {
                 board.check(drawnNumber);
                 if (board.isWinning()) {
-                    myBoards = myBoards.filter(({boardId}) => boardId !== board.boardId);
-                    console.log(boards);
+                    remainingBoards = remainingBoards.filter(({boardId}) => boardId !== board.boardId);
                     score = board.calculateScore(drawnNumber);
                 }
             });
