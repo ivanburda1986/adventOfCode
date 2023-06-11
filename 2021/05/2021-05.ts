@@ -74,13 +74,13 @@ export const getLineFullCoordinates = (coordinates: LineCoordinates, lineDirecti
     }
 
     if (lineDirection === LineDirection.vertical) {
-        //OK: ["7", "0", "7", "4"] -> Up
+        //OK: ["7", "0", "7", "4"] -> Down
         if (y1 < y2) {
             for (let i = y1; i <= y2; i++) {
                 numericalCoordinatesRange.push([x1, i]);
             }
         }
-        //OK: ["2", "2", "2", "1"] -> Down
+        //OK: ["2", "2", "2", "1"] -> Up
         if (y1 > y2) {
             for (let i = y1; i >= y2; i--) {
                 numericalCoordinatesRange.push([x1, i]);
