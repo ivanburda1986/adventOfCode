@@ -1,46 +1,6 @@
-import {defaultDict} from "../../utils/defaultDictionary";
-/*
-Split input by line breaks
-For each line, get: [[8,0],[0,8]]
-
-Evaluate where the line is horizontal or vertical
-x === x || y === 0
-horizontal: number for x (i.e. the first number) is the same for both value
-vertical: number for y (i.e. the second number) is the same for both values
-
-For horizontal and vertical:
- * Map where key is line X number
- * and value is a map where key is Y and value number of vents at the position
- * For 9,4 -> 3,4 ====>
- * represent the range as: [[9,4],[8,4],[7,4], [5,4],[4,4],[3,4]]
- * go over X and access the map at the X position and then access the nested map at the Y position and mark it as vent
- * if going over Y and it is already marked as vent, increase the overall count of fields where at least 2 vents are located
-
- const ventMap = {
- "9":{
-      "4":1},
- "8":{
-      "4":1},
- "7":{
-      "4":1},
- "6":{
-      "4":1},
- "5":{
-      "4":1},
- "4":{
-      "4":1},
- "3":{
-      "4":1},
-
- }
-
-For diagonal
- * For 8,0 -> 0,8 ====> [[8,0],[7,1],[6,2],[5,3],[4,4],[3,5],[2,6],[1,7],[0,8]]
- *
- *
- */
 type LineCoordinates = [string, string, string, string]
 type VentCoordinates = [string, string];
+
 export const getParsedInput = (input: string): LineCoordinates[] => {
     const lines = input.split("\n");
     return lines.map((line) => {
@@ -83,37 +43,82 @@ export const sortLinesByDirection = (lineCoordinates: LineCoordinates[]): Sorted
 
 export enum LineDirection {
     horizontal = "horizontal",
-    vertical = "vertical"
+    vertical = "vertical",
+    diagonal = "diagonal"
 }
 
 export const getLineFullCoordinates = (coordinates: LineCoordinates, lineDirection: LineDirection): VentCoordinates[] => {
     const numericalCoordinates = coordinates.map(coordinate => Number(coordinate));
-    const [x1, y1, x2, y2] = coordinates.map(coordinate => Number(coordinate));
+    // const [x1, y1, x2, y2] = coordinates.map(coordinate => Number(coordinate));
+    const x1 = numericalCoordinates[0];
+    const y1 = numericalCoordinates[1];
+    const x2 = numericalCoordinates[2];
+    const y2 = numericalCoordinates[3];
     const numericalCoordinatesRange = [];
 
-    // ["0", "9", "5", "9"]
+
     if (lineDirection === LineDirection.horizontal) {
+        //OK: ["0", "9", "5", "9"] -> Right
         if (x1 < x2) {
             for (let i = x1; i <= x2; i++) {
                 numericalCoordinatesRange.push([i, y1]);
             }
         }
+        //OK: ["3", "4", "1", "4"] -> Left
+        //OK: ["9", "4", "3", "4"] -> Left
         if (x1 > x2) {
-            for (let i = x2; i <= x1; i++) {
+            for (let i = x1; i >= x2; i--) {
                 numericalCoordinatesRange.push([i, y1]);
             }
         }
     }
-    // ["7", "0", "7", "4"]
+
     if (lineDirection === LineDirection.vertical) {
+        //OK: ["7", "0", "7", "4"] -> Up
         if (y1 < y2) {
             for (let i = y1; i <= y2; i++) {
                 numericalCoordinatesRange.push([x1, i]);
             }
         }
+        //OK: ["2", "2", "2", "1"] -> Down
         if (y1 > y2) {
-            for (let i = y2; i <= y1; i++) {
+            for (let i = y1; i >= y2; i--) {
                 numericalCoordinatesRange.push([x1, i]);
+            }
+        }
+    }
+
+    if (lineDirection === LineDirection.diagonal) {
+        //OK: ["0", "0", "8", "8"]  -> BottomRight
+        if (x1 < x2 && y1 < y2) {
+            let y = y1;
+            for (let i = x1; i <= x2; i++) {
+                numericalCoordinatesRange.push([i, y]);
+                y++;
+            }
+        }
+        //OK: ["8", "0", "0", "8"] -> BottomLeft
+        if (x1 > x2 && y1 < y2) {
+            let y = y2;
+            for (let i = x2; i <= x1; i++) {
+                numericalCoordinatesRange.push([y, i]);
+                y--;
+            }
+        }
+        //OK: ["5", "5", "8", "2"] -> UpRight
+        if (x1 < x2 && y1 > y2) {
+            let y = y1;
+            for (let i = x1; i <= x2; i++) {
+                numericalCoordinatesRange.push([i, y]);
+                y--;
+            }
+        }
+        //OK: ["6", "4", "2", "0"]  -> UpLeft
+        if (x1 > x2 && y1 > y2) {
+            let y = y1;
+            for (let i = x1; i >= x2; i--) {
+                numericalCoordinatesRange.push([i, y]);
+                y--;
             }
         }
     }
@@ -136,27 +141,31 @@ export class VentMap {
         }
     }
 
-    getCoordinatesCount(coordinates: VentCoordinates) {
-        const [x, y] = coordinates;
-        return this.ventMap[x][y];
-    }
-
     getOverlapCount() {
         let overlapCount = 0;
-        Object.values(this.ventMap).forEach(xCombination => Object.values(xCombination).forEach(xyCoordinates => xyCoordinates > 1 ? overlapCount++ : null));
+        Object.values(this.ventMap).forEach(xCombination => Object.values(xCombination).forEach(xyCoordinates => xyCoordinates >= 2 ? overlapCount++ : null));
         return overlapCount;
     }
 
 }
 
-export const getOverlapCount = (input: string): number => {
+export const getOverlapCount = (input: string, shouldIncludeDiagonal?: boolean): number => {
     const myVentMap = new VentMap();
     const linesSortedByDirection: SortedLinesByDirection = sortLinesByDirection(getParsedInput(input));
     const horizontalLinesAllCoordinates: VentCoordinates[][] = [];
     const verticalLinesAllCoordinates: VentCoordinates[][] = [];
+    const diagonalLinesAllCoordinates: VentCoordinates[][] = [];
+
     linesSortedByDirection.horizontal.forEach(line => horizontalLinesAllCoordinates.push(getLineFullCoordinates(line, LineDirection.horizontal)));
-    linesSortedByDirection.vertical.forEach(line => verticalLinesAllCoordinates.push(getLineFullCoordinates(line, LineDirection.vertical)));
     horizontalLinesAllCoordinates.forEach(oneLineAllCoordinates => oneLineAllCoordinates.forEach(singleCoordinatesOfLine => myVentMap.addCoordinates(singleCoordinatesOfLine)));
+
+    linesSortedByDirection.vertical.forEach(line => verticalLinesAllCoordinates.push(getLineFullCoordinates(line, LineDirection.vertical)));
     verticalLinesAllCoordinates.forEach(oneLineAllCoordinates => oneLineAllCoordinates.forEach(singleCoordinatesOfLine => myVentMap.addCoordinates(singleCoordinatesOfLine)));
+
+    if (shouldIncludeDiagonal) {
+        linesSortedByDirection.diagonal.forEach(line => diagonalLinesAllCoordinates.push(getLineFullCoordinates(line, LineDirection.diagonal)));
+        diagonalLinesAllCoordinates.forEach(oneLineAllCoordinates => oneLineAllCoordinates.forEach(singleCoordinatesOfLine => myVentMap.addCoordinates(singleCoordinatesOfLine)));
+    }
+
     return myVentMap.getOverlapCount();
 };
