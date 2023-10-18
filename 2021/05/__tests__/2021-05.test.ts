@@ -79,10 +79,9 @@ describe('AOC-2021-05', () => {
             expect(getOverlapCount(sampleInput, true)).toBe(12);
         });
 
-        it('returns 123456 as the number of points where at least two horizontal/vertical/diagonal lines overlap in the real data', () => {
+        it('returns xxxxxx as the number of points where at least two horizontal/vertical/diagonal lines overlap in the real data', () => {
             const input = readFileSync('2021/05/2021-05.txt', {encoding: 'utf8', flag: 'r'});
             expect(getOverlapCount(input, true)).toBe(1);
         });
     });
 });
-
