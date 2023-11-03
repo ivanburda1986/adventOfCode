@@ -36,11 +36,13 @@ export const getHighestSeatId = (input: string) => {
     return Math.max(...input.split('\n').map(passport => getSeatId(passport)));
 };
 
+
 export const getMySeatId = (input: string) => {
     const allSeatIdsSorted = input.split('\n')
         .map(passport => getSeatId(passport))
         .sort((a, b) => a - b);
     const allSeatIdsWithRemovedFirstAndLast = allSeatIdsSorted.slice(1, -1);
+
 
     for (let i = 0; i < allSeatIdsWithRemovedFirstAndLast.length; i++) {
         if (allSeatIdsWithRemovedFirstAndLast[i + 1] - allSeatIdsWithRemovedFirstAndLast[i] > 1) {

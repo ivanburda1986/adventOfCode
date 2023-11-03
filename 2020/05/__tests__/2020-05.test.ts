@@ -8,6 +8,10 @@ describe('helpers', () => {
     });
 
     it('returns rowNumber', () => {
+        expect(getRowNumber("FFFBBBF")).toBe(14);
+    });
+
+    it('returns rowNumber', () => {
         expect(getRowNumber("BBFFBBF")).toBe(102);
     });
 
