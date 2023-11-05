@@ -41,13 +41,15 @@ a
 a
 a
 
-b`;
+b
+
+`;
         expect(getCountSumOfSharedYesAnswer(input)).toBe(6);
     });
 
     it('returns xxx as count of answers for which all people in a group answered YES in the real data', () => {
         const input = readFileSync('2020/06/2020-06.txt', {encoding: 'utf8', flag: 'r'});
-        expect(getCountSumOfSharedYesAnswer(input)).toBe(1);
         expect(getCountSumOfSharedYesAnswer(input)).not.toBe(3346);
+        expect(getCountSumOfSharedYesAnswer(input)).toBe(3356);
     });
 });

@@ -10,19 +10,25 @@ export const getCountSumOfUniqueYesAnswers = (input: string) => {
 
 export const getCountSumOfSharedYesAnswer = (input: string) => {
     const inputFiltered = input.split('\n\n');
-    console.log(inputFiltered);
     return inputFiltered.reduce((sum, group) => {
         const answerMap: Record<string, number> = defaultDict(0);
         let groupSize = 0;
         group.split('\n')
-            .forEach(line => {
+            .forEach((line, index) => {
+                if (line === '') {
+                    return;
+                }
+
                 groupSize++;
                 line.split('')
-                    .forEach(letter => answerMap[letter]++);
+                    .forEach(letter => {
+                        answerMap[letter]++;
+                    });
             });
+        const keys = Object.keys(answerMap);
         const values = Object.values(answerMap);
-        console.log(values);
-        console.log(groupSize);
+        const entries = Object.entries(answerMap);
+
         values.forEach(answerCount => {
             if (answerCount === groupSize) {
                 sum = sum + 1;
