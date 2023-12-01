@@ -1,4 +1,4 @@
-import {getCalibrationSum} from "../2023-01";
+import {getCalibrationSum, getCalibrationSum2} from "../2023-01";
 import {readFileSync} from "fs";
 
 describe('AOC-2023-01', () => {
@@ -16,15 +16,14 @@ treb7uchet`;
         expect(getCalibrationSum(input)).toBe(54708);
     });
 
-
     it('part2 returns calibration sum to be 281 for the test input', () => {
-        const input = `two1nine
-eightwothree
-abcone2threexyz
-xtwone3four
-4nineeightseven2
-zoneight234
-7pqrstsixteen`;
-        expect(getCalibrationSum(input)).toBe(281);
+        const input = `twotwosevenfiveseven`;
+        expect(getCalibrationSum2(input)).toBe(281);
+    });
+
+    it('part2 returns calibration sum to be xxx for the real input', () => {
+        const input = readFileSync('2023/01/2023-01.txt', {encoding: 'utf8', flag: 'r'});
+        // expect(getCalibrationSum2(input)).not.toBe(54125);
+        expect(getCalibrationSum2(input)).toBe(1);
     });
 });
