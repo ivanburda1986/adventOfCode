@@ -16,23 +16,28 @@ export const getCalibrationSum = (input: string) =>
 
 
 export const getCalibrationSum2 = (input: string) => {
-    const result = input.split('\n')
+    return input.split('\n')
         .map(lineMixed => lineMixed.replaceAll(/[0-9]/g, function (match) {
             return numberWords[Number(match)];
         }))
         .map(lineWordsOnly => {
             console.log(lineWordsOnly);
             const numbers: { locatedNumber: number, at: number }[] = [];
+
             for (let key in wordNumbers) {
-                if (lineWordsOnly.includes(key)) {
+                const dynamicRegexVal = new RegExp(key, "g");
+                const numberOccurrenceCount = lineWordsOnly.match(dynamicRegexVal)?.length;
+                if (numberOccurrenceCount) {
                     numbers.push({locatedNumber: wordNumbers[key], at: lineWordsOnly.indexOf(key)});
+                }
+                if (numberOccurrenceCount && numberOccurrenceCount > 1) {
+                    numbers.push({locatedNumber: wordNumbers[key], at: lineWordsOnly.lastIndexOf(key)});
                 }
             }
             return numbers
                 .sort((a, b) => a.at - b.at)
                 .map(numberAtPosition => numberAtPosition.locatedNumber);
-        });
-    // .map(arrayOfNumbers => Number([arrayOfNumbers[0], arrayOfNumbers[arrayOfNumbers.length - 1]].join('')));
-    console.log(result);
-    // .reduce((accumulated, number) => accumulated + number, 0);
+        })
+        .map(arrayOfNumbers => Number([arrayOfNumbers[0], arrayOfNumbers[arrayOfNumbers.length - 1]].join('')))
+        .reduce((accumulated, number) => accumulated + number, 0);
 };
