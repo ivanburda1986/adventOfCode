@@ -21,7 +21,6 @@ export const getCalibrationSum2 = (input: string) => {
             return numberWords[Number(match)];
         }))
         .map(lineWordsOnly => {
-            console.log(lineWordsOnly);
             const numbers: { locatedNumber: number, at: number }[] = [];
 
             for (let key in wordNumbers) {
