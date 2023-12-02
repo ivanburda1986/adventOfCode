@@ -46,5 +46,5 @@ export const powerOfMinCubeCounts = (i: string) => {
     });
     return gamesHighestColorCounts.map(gameHighestCounts =>
         gameHighestCounts.get('red') * gameHighestCounts.get('green') * gameHighestCounts.get('blue')
-    ).reduce((accumalated, current) => accumalated + current, 0);
+    ).reduce((accumulated, current) => accumulated + current, 0);
 };
