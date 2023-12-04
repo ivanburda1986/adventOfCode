@@ -3,8 +3,7 @@ import {getPartSum} from "../2023-03";
 
 describe('AOC-2023-03', () => {
     it('part1 returns 4361 as a part sum for test input', () => {
-        const input = `..........
-467..114..
+        const input = `467..114..
 ...*......
 ..35..633.
 ......#...
@@ -13,8 +12,7 @@ describe('AOC-2023-03', () => {
 ..592.....
 ......755.
 ...$.*....
-.664.598..
-..........`;
+.664.598..`;
         expect(getPartSum(input)).toBe(4361);
     });
 
@@ -23,6 +21,8 @@ describe('AOC-2023-03', () => {
         expect(getPartSum(input)).not.toBe(471097);
         expect(getPartSum(input)).not.toBe(533735);
         expect(getPartSum(input)).not.toBe(538039);
+        expect(getPartSum(input)).not.toBe(539003);
+        expect(getPartSum(input)).not.toBe(488583);
         expect(getPartSum(input)).toBe(1);
     });
 });
