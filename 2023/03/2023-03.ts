@@ -21,7 +21,7 @@ function hasSpecialCharacters(text: string) {
 
 type adjType = 'TOP' | 'SIDE' | 'BOTTOM'
 
-function printItem(matrix: string[], row: number, rowCount: number, numberChunkRange: {
+function printPart(matrix: string[], row: number, rowCount: number, numberChunkRange: {
     start: number,
     end: number
 }, adjType: adjType) {
@@ -47,6 +47,7 @@ function printItem(matrix: string[], row: number, rowCount: number, numberChunkR
     }
 }
 
+
 export const getPartSum = (input: string) => {
     const matrix = input.split('\n');
     const rowCount = matrix.length;
@@ -63,7 +64,7 @@ export const getPartSum = (input: string) => {
                         const hasTopAdjacency = hasSpecialCharacters(matrix[row - 1].substring(numberChunkRange.start - 1, numberChunkRange.end + 2));
                         if (hasTopAdjacency) {
                             partNumbers.push(chunk);
-                            printItem(matrix, row, rowCount, numberChunkRange, "TOP");
+                            printPart(matrix, row, rowCount, numberChunkRange, "TOP");
                             return;
                         }
                     }
@@ -71,17 +72,25 @@ export const getPartSum = (input: string) => {
                     const hasSideAdjacency = hasSpecialCharacters(matrix[row].substring(numberChunkRange.start - 1, numberChunkRange.end + 2));
                     if (hasSideAdjacency) {
                         partNumbers.push(chunk);
-                        printItem(matrix, row, rowCount, numberChunkRange, "SIDE");
+                        printPart(matrix, row, rowCount, numberChunkRange, "SIDE");
                         return;
                     }
 
                     if (row < rowCount - 1) {
                         const hasBottomAdjacency = hasSpecialCharacters(matrix[row + 1].substring(numberChunkRange.start - 1, numberChunkRange.end + 2));
                         if (hasBottomAdjacency) {
-                            printItem(matrix, row, rowCount, numberChunkRange, "BOTTOM");
+                            printPart(matrix, row, rowCount, numberChunkRange, "BOTTOM");
                             partNumbers.push(chunk);
                             return;
                         }
+                    }
+
+                    if (row > 0) {
+                        printPart(matrix, row, rowCount, numberChunkRange, "TOP");
+                    }
+
+                    if (row < rowCount - 1) {
+                        printPart(matrix, row, rowCount, numberChunkRange, "BOTTOM");
                     }
 
                     aloneParts.push(chunk);
