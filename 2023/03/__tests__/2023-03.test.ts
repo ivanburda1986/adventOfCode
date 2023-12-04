@@ -16,13 +16,8 @@ describe('AOC-2023-03', () => {
         expect(getPartSum(input)).toBe(4361);
     });
 
-    it('part1 returns xxx as a part sum for real input', () => {
+    it('part1 returns 533784 as a part sum for real input', () => {
         const input = readFileSync('2023/03/2023-03.txt', {encoding: 'utf8', flag: 'r'});
-        expect(getPartSum(input)).not.toBe(471097);
-        expect(getPartSum(input)).not.toBe(533735);
-        expect(getPartSum(input)).not.toBe(538039);
-        expect(getPartSum(input)).not.toBe(539003);
-        expect(getPartSum(input)).not.toBe(488583);
-        expect(getPartSum(input)).toBe(1);
+        expect(getPartSum(input)).toBe(533784);
     });
 });

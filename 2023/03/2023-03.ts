@@ -4,14 +4,18 @@ function findNumberSubstrings(inputString: string): string[] {
 }
 
 function findSubstringRange(inputString: string, substring: string): { start: number, end: number } | null {
-    const startIndex = inputString.indexOf(substring);
+    const targetString = substring.toString();
+    const regex = new RegExp(`\\b${substring}\\b`, 'g');
 
-    if (startIndex !== -1) {
-        const endIndex = startIndex + substring.length - 1;
+    const match = regex.exec(inputString);
+
+    if (match) {
+        const startIndex = match.index;
+        const endIndex = startIndex + targetString.length - 1;
         return {start: startIndex, end: endIndex};
-    } else {
-        return null;
     }
+
+    return null;
 }
 
 function hasSpecialCharacters(text: string) {
@@ -99,8 +103,6 @@ export const getPartSum = (input: string) => {
             });
         }
     }
-    console.log(partNumbers);
-    console.log(aloneParts);
 
     return partNumbers.map(number => parseInt(number)).reduce((a, c) => a + c, 0);
 };
