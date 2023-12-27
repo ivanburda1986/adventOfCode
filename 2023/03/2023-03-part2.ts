@@ -1,5 +1,5 @@
 function getAsteriskPositions(inputString: string): number[] {
-    const asteriskPositions = [];
+    const asteriskPositions: number[] = [];
 
     for (let i = 0; i < inputString.length; i++) {
         if (inputString[i] === '*') {
