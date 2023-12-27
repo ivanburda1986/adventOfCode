@@ -68,7 +68,6 @@ function getWholeNumberBeforeIndex(inputString: string, index: number) {
     }
 
     startIndex++;
-
     return inputString.slice(startIndex, index);
 }
 
@@ -84,7 +83,6 @@ function getWholeNumberAfterIndex(inputString: string, index: number) {
 export const getGearMultiplicationSum = (input: string) => {
     const matrix = input.split('\n');
     const rowCount = matrix.length;
-    const asterisksWithAdjacentNumbers: string[] = [];
     const gearMultiplications: number[] = [];
 
     for (let row = 0; row < rowCount; row++) {
