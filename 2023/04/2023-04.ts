@@ -1,16 +1,3 @@
-/*
-calculate intersection point for each 2 lines
-if it exists check that the point is within the given range
-if the intersection point is in the range, increase the counter
- */
-
-interface Line {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-}
-
 interface HailStoneTrajectory {
     x1: number;
     y1: number;
@@ -23,8 +10,7 @@ interface HailStoneTrajectory {
     vz: number;
 }
 
-
-export function findIntersectionPoint(hailstonePair: HailStoneTrajectory[]) {
+export function findIntersectionPoint(hailstonePair: HailStoneTrajectory[], bottom: number, top: number) {
     const line1 = hailstonePair[0];
     const line2 = hailstonePair[1];
 
@@ -43,6 +29,37 @@ export function findIntersectionPoint(hailstonePair: HailStoneTrajectory[]) {
     // Calculate intersection point
     let xIntersection = (b2 - b1) / (m1 - m2);
     let yIntersection = m1 * xIntersection + b1;
+
+    // Check whether intersection is out of borders
+    if (xIntersection <= bottom || xIntersection >= top || yIntersection <= bottom || yIntersection >= top) {
+        return null;
+    }
+
+    // Check whether intersection happened in the past
+    if (line1.x1 - line1.x2 > 0) {
+        if (xIntersection > line1.x1) {
+            return null;
+        }
+    }
+
+    if (line1.y1 - line1.y2 > 0) {
+        if (yIntersection > line1.y1) {
+            return null;
+        }
+    }
+
+    if (line2.x1 - line2.x2 > 0) {
+        if (xIntersection > line2.x1) {
+            return null;
+        }
+    }
+
+    if (line2.y1 - line2.y2 > 0) {
+        if (yIntersection > line2.y1) {
+            return null;
+        }
+    }
+
 
     return {x: xIntersection, y: yIntersection};
 }
@@ -66,22 +83,17 @@ function createUniquePairs(inputArray: HailStoneTrajectory[]) {
             }
         }
     }
-
     return uniquePairs;
 }
 
-export const getCrossingPathCount = (input: string) => {
-    let count = 0;
+
+export const getCrossingPathCount = (input: string, bottom: number, top: number) => {
     const hailStones: HailStoneTrajectory[] = input.split('\n').map(line => line.replaceAll('@', ',')).map(line => {
         const [x1, y1, z1, vx, vy, vz] = line.split(',').map(value => Number(value.trim()));
         return {x1, y1, z1, x2: x1 + vx, y2: y1 + vy, z2: z1 + vz, vx, vy, vz};
     });
 
-    // const intersection = findIntersectionPoint({
-    //     line1: {x1: hailStones[i].x1, y1: hailStones[i].y1, x2: hailStones[i].x2, y2: hailStones[i].y2},
-    //     line2: {x1: hailStones[j].x1, y1: hailStones[j].y1, x2: hailStones[j].x2, y2: hailStones[j].y2},
-    // });
     const uniquePairs = createUniquePairs(hailStones) ?? [];
-    console.log(uniquePairs);
-    console.log(uniquePairs?.map(findIntersectionPoint));
+    // console.log(uniquePairs?.map(pair => findIntersectionPoint(pair, bottom, top)).filter(Boolean));
+    return uniquePairs?.map(pair => findIntersectionPoint(pair, bottom, top)).filter(Boolean).length;
 };
