@@ -30,11 +30,6 @@ export function findIntersectionPoint(hailstonePair: HailStoneTrajectory[], bott
     let xIntersection = (b2 - b1) / (m1 - m2);
     let yIntersection = m1 * xIntersection + b1;
 
-    // Check whether intersection is out of borders
-    if (xIntersection <= bottom || xIntersection >= top || yIntersection <= bottom || yIntersection >= top) {
-        return null;
-    }
-
     // Check whether intersection happened in the past
     if (line1.x1 - line1.x2 > 0) {
         if (xIntersection > line1.x1) {
@@ -58,6 +53,11 @@ export function findIntersectionPoint(hailstonePair: HailStoneTrajectory[], bott
         if (yIntersection > line2.y1) {
             return null;
         }
+    }
+
+    // Check whether intersection is out of borders
+    if (xIntersection < bottom || xIntersection > top || yIntersection < bottom || yIntersection > top) {
+        return null;
     }
 
 
