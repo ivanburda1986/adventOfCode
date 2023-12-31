@@ -11,9 +11,8 @@ describe('AOC-2023-04', () => {
         expect(getCrossingPathCount(input, 7, 27)).toBe(2);
     });
 
-    it('returns that x hailstone future paths crosses for the real data', () => {
+    it('returns that 25433 hailstone future paths crosses for the real data', () => {
         const input = readFileSync('2023/04/2023-04.txt', {encoding: 'utf8', flag: 'r'});
-        // expect(getCrossingPathCount(input, 200000000000000, 400000000000000)).not.toBe(28654);
-        expect(getCrossingPathCount(input, 200000000000000, 400000000000000)).toBe(2);
+        expect(getCrossingPathCount(input, 200000000000000, 400000000000000)).toBe(25433);
     });
 });

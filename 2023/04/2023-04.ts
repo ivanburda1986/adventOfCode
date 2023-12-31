@@ -31,28 +31,17 @@ export function findIntersectionPoint(hailstonePair: HailStoneTrajectory[], bott
     let yIntersection = m1 * xIntersection + b1;
 
     // Check whether intersection happened in the past
-    if (line1.x1 - line1.x2 > 0) {
-        if (xIntersection > line1.x1) {
-            return null;
-        }
+    if (line1.vx > 0 && xIntersection <= line1.x1 || line1.vx < 0 && xIntersection >= line1.x1) {
+        return null;
     }
-
-    if (line1.y1 - line1.y2 > 0) {
-        if (yIntersection > line1.y1) {
-            return null;
-        }
+    if (line1.vy > 0 && yIntersection <= line1.y1 || line1.vy < 0 && yIntersection >= line1.y1) {
+        return null;
     }
-
-    if (line2.x1 - line2.x2 > 0) {
-        if (xIntersection > line2.x1) {
-            return null;
-        }
+    if (line2.vx > 0 && xIntersection <= line2.x1 || line2.vx < 0 && xIntersection >= line2.x1) {
+        return null;
     }
-
-    if (line2.y1 - line2.y2 > 0) {
-        if (yIntersection > line2.y1) {
-            return null;
-        }
+    if (line2.vy > 0 && yIntersection <= line2.y1 || line2.vy < 0 && yIntersection >= line2.y1) {
+        return null;
     }
 
     // Check whether intersection is out of borders
@@ -86,7 +75,6 @@ function createUniquePairs(inputArray: HailStoneTrajectory[]) {
     return uniquePairs;
 }
 
-
 export const getCrossingPathCount = (input: string, bottom: number, top: number) => {
     const hailStones: HailStoneTrajectory[] = input.split('\n').map(line => line.replaceAll('@', ',')).map(line => {
         const [x1, y1, z1, vx, vy, vz] = line.split(',').map(value => Number(value.trim()));
@@ -94,6 +82,5 @@ export const getCrossingPathCount = (input: string, bottom: number, top: number)
     });
 
     const uniquePairs = createUniquePairs(hailStones) ?? [];
-    // console.log(uniquePairs?.map(pair => findIntersectionPoint(pair, bottom, top)).filter(Boolean));
     return uniquePairs?.map(pair => findIntersectionPoint(pair, bottom, top)).filter(Boolean).length;
 };
