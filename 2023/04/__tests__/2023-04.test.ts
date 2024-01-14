@@ -27,7 +27,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`;
         expect(getCardCount(input)).toBe(30);
     });
 
-    it('returns xx to be number of scratchcards for the test data', () => {
+    it('returns xx to be number of scratchcards for the real data', () => {
         const input = readFileSync('2023/04/2023-04.txt', {encoding: 'utf8', flag: 'r'});
         expect(getCardCount(input)).toBe(1);
     });
