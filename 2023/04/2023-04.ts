@@ -46,7 +46,7 @@ const getCardWinningNumberCount = (winning: string[], actual: string[]) => {
             points++;
         }
     }
-    console.log(points);
+
     return points;
 };
 
@@ -62,7 +62,7 @@ function createNumberObject(n: number) {
 
 
 export const getCardCount = (input: string): number => {
-    const cardRepresentations: Record<string, Record<string, string[]>> = {};
+    const cardRepresentations: { count: number, points: number }[] = [];
 
     input.split('\n').map(card => {
         const [cardName, allNumbers] = card.split(": ");
@@ -71,19 +71,21 @@ export const getCardCount = (input: string): number => {
         const actual = actualString.split(' ').filter(Boolean);
         const number = getCardNumber(cardName);
         if (number) {
-            cardRepresentations[number] = {winning, actual};
+            cardRepresentations.push({count: 1, points: getCardWinningNumberCount(winning, actual)});
         }
     });
+    // console.log(cardRepresentations);
+    for (let i = 0; i < cardRepresentations.length; i++) {
+        // console.log();
+        for (let j = 1; j <= cardRepresentations[i].count; j++) {
+            // console.log(cardRepresentations[i].count);
+            for (let k = 1; k <= cardRepresentations[i].points; k++) {
+                cardRepresentations[i + k].count += 1;
+            }
 
-    const playerCardCount = createNumberObject(Object.entries(cardRepresentations).length);
-    for (let i = 1; i <= Object.entries(playerCardCount).length; i++) {
-        for (let j = 1; j <= playerCardCount[i.toString()]; j++) {
-            getCardWinningNumberCount(cardRepresentations[i.toString()].winning, cardRepresentations[i.toString()].actual);
         }
     }
-
-    // initialCardSet.map(card => getCardWinningNumberCount(card.winning, card.actual));
-
-
-    return 0;
+    const result = cardRepresentations.reduce((a, c) => a + c.count, 0);
+    console.log(result);
+    return result;
 };
